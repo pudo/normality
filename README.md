@@ -13,7 +13,7 @@ a preparation to further text analysis.
 from normality import normalize, slugify
 
 text = normalize('Nie wieder "Grüne Süppchen" kochen!')
-assert text == 'nie wieder gruene sueppchen kochen'
+assert text == 'nie wieder grune suppchen kochen'
 
 slug = slugify('My first blog post!')
 assert slug == 'my-first-blog-post'
