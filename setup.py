@@ -26,7 +26,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'six',
-        'python-slugify >= 0.0.6'
+        'unidecode'
     ],
     tests_require=[],
     test_suite='test',
