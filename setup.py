@@ -1,9 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(
     name='normality',
-    version='0.1',
+    version='0.2',
     description="Micro-library to normalize text strings",
     long_description="",
     classifiers=[
@@ -20,10 +20,10 @@ setup(
     author_email='friedrich@pudo.org',
     url='http://github.com/pudo/normality',
     license='MIT',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'test']),
+    py_modules=['normality'],
     namespace_packages=[],
     include_package_data=False,
-    zip_safe=False,
+    zip_safe=True,
     install_requires=[
         'six',
         'unidecode'
