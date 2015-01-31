@@ -12,7 +12,7 @@ CATEGORY_DEFAULTS = {
     'C': WS,
     'M': '',
     'Z': WS,
-    'P': '',
+    'P': WS,
     'S': WS
 }
 
