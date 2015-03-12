@@ -23,6 +23,8 @@ assert slug == 'my-first-blog-post'
 
 Read the source code, it's twenty lines of stuff.
 
+![RTSL](http://cdn.meme.am/instances/500x/58064648.jpg)
+
 ## License
 
 ``normality`` is open source, licensed under a standard MIT license
