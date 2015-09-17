@@ -1,7 +1,6 @@
 import re
 import six
 import unicodedata
-from unidecode import unidecode
 
 WS = ' '
 COLLAPSE = re.compile(r'\s+')
@@ -18,7 +17,7 @@ CATEGORY_DEFAULTS = {
 
 
 def normalize(text, lowercase=True, collapse=True, decompose=True,
-              transliterate=False, replace_categories=CATEGORY_DEFAULTS):
+              replace_categories=CATEGORY_DEFAULTS):
     """ The main normalization function for text. This will take a string
     and apply a set of transformations to it so that it can be processed
     more easily afterwards. Arguments:
@@ -29,8 +28,6 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
       which can lead to a lot of whitespace.
     * ``decompose``: apply a unicode normalization (NFKD) to separate
       simple characters and their diacritics.
-    * ``transliterate``: attempt to transform all text (including cyrillic,
-      CJK, etc.) into a latin equivalent.
     * ``replace_categories``: This will perform a replacement of whole
       classes of unicode characters (e.g. symbols, marks, numbers) with a
       given character. It is used to replace any non-text elements of the
@@ -48,14 +45,14 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
         # Yeah I made a Python package for this.
         text = text.lower()
 
-    if transliterate:
-        # Perform unicode-based transliteration, e.g. of cyricllic
-        # or CJK scripts into latin.
-        text = unidecode(text)
-        if six.PY2:
-            text = unicode(text)
+    # if transliterate:
+    #    # Perform unicode-based transliteration, e.g. of cyricllic
+    #    # or CJK scripts into latin.
+    #    text = unidecode(text)
+    #    if six.PY2:
+    #        text = unicode(text)
 
-    if decompose and not transliterate:
+    if decompose:
         # Apply a canonical unicoe normalization form, e.g.
         # transform all composite characters with diacritics
         # into a series of characters followed by their
