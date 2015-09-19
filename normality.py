@@ -78,6 +78,6 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
 
 def slugify(text, sep='-'):
     """ A simple slug generator. """
-    text = normalize(text, transliterate=True, collapse=True)
+    text = normalize(text, collapse=True)
     if text is not None:
         return text.replace(WS, sep)
