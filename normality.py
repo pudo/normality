@@ -9,7 +9,8 @@ COLLAPSE = re.compile(r'\s+')
 # http://www.fileformat.info/info/unicode/category/index.htm
 CATEGORY_DEFAULTS = {
     'C': WS,
-    'M': '',
+    'Lm': None,
+    'M': None,
     'Z': WS,
     'P': WS,
     'S': WS
@@ -18,9 +19,10 @@ CATEGORY_DEFAULTS = {
 
 def normalize(text, lowercase=True, collapse=True, decompose=True,
               replace_categories=CATEGORY_DEFAULTS):
-    """ The main normalization function for text. This will take a string
-    and apply a set of transformations to it so that it can be processed
-    more easily afterwards. Arguments:
+    """The main normalization function for text.
+
+    This will take a string and apply a set of transformations to it so
+    that it can be processed more easily afterwards. Arguments:
 
     * ``lowercase``: not very mysterious.
     * ``collapse``: replace multiple whitespace-like characters with a
@@ -32,7 +34,6 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
       classes of unicode characters (e.g. symbols, marks, numbers) with a
       given character. It is used to replace any non-text elements of the
       input string.
-
     """
     if not isinstance(text, six.string_types):
         return
@@ -53,7 +54,7 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
     #        text = unicode(text)
 
     if decompose:
-        # Apply a canonical unicoe normalization form, e.g.
+        # Apply a canonical unicode normalization form, e.g.
         # transform all composite characters with diacritics
         # into a series of characters followed by their
         # diacritics as separate unicode codepoints.
@@ -64,9 +65,12 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
     # punctuation, or whitespace-like characters.
     characters = []
     for character in text:
-        category = unicodedata.category(character)[0]
-        character = replace_categories.get(category, character)
-        characters.append(character)
+        category = unicodedata.category(character)
+        if category not in replace_categories:
+            category = category[0]
+        replacement = replace_categories.get(category, character)
+        if replacement is not None:
+            characters.append(replacement)
     text = u''.join(characters)
 
     if collapse:
@@ -77,7 +81,7 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
 
 
 def slugify(text, sep='-'):
-    """ A simple slug generator. """
+    """A simple slug generator."""
     text = normalize(text, collapse=True)
     if text is not None:
         return text.replace(WS, sep)
