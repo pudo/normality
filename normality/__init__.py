@@ -2,8 +2,9 @@ import re
 import six
 import unicodedata
 
+from normality.cleaning import collapse_spaces
+
 WS = ' '
-COLLAPSE = re.compile(r'\s+')
 
 # Unicode character classes, see:
 # http://www.fileformat.info/info/unicode/category/index.htm
@@ -75,7 +76,7 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
 
     if collapse:
         # Remove consecutive whitespace.
-        text = COLLAPSE.sub(WS, text).strip(WS)
+        text = collapse_spaces(text)
 
     return text
 
@@ -84,4 +85,4 @@ def slugify(text, sep='-'):
     """A simple slug generator."""
     text = normalize(text, collapse=True)
     if text is not None:
-        return text.replace(WS, sep)
+        return text.replace(' ', sep)
