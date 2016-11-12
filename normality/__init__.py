@@ -1,25 +1,14 @@
-import re
 import six
-import unicodedata
 
-from normality.cleaning import collapse_spaces
+from normality.cleaning import collapse_spaces, category_replace
+from normality.constants import UNICODE_CATEGORIES
+from normality.transliteration import latinize_text
 
 WS = ' '
 
-# Unicode character classes, see:
-# http://www.fileformat.info/info/unicode/category/index.htm
-CATEGORY_DEFAULTS = {
-    'C': WS,
-    'Lm': None,
-    'M': None,
-    'Z': WS,
-    'P': WS,
-    'S': WS
-}
 
-
-def normalize(text, lowercase=True, collapse=True, decompose=True,
-              replace_categories=CATEGORY_DEFAULTS):
+def normalize(text, lowercase=True, collapse=True, latinize=False,
+              replace_categories=UNICODE_CATEGORIES):
     """The main normalization function for text.
 
     This will take a string and apply a set of transformations to it so
@@ -47,32 +36,15 @@ def normalize(text, lowercase=True, collapse=True, decompose=True,
         # Yeah I made a Python package for this.
         text = text.lower()
 
-    # if transliterate:
-    #    # Perform unicode-based transliteration, e.g. of cyricllic
-    #    # or CJK scripts into latin.
-    #    text = unidecode(text)
-    #    if six.PY2:
-    #        text = unicode(text)
-
-    if decompose:
-        # Apply a canonical unicode normalization form, e.g.
-        # transform all composite characters with diacritics
-        # into a series of characters followed by their
-        # diacritics as separate unicode codepoints.
-        text = unicodedata.normalize('NFKD', text)
+    if latinize:
+        # Perform unicode-based transliteration, e.g. of cyricllic
+        # or CJK scripts into latin.
+        text = latinize_text(text)
 
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
     # punctuation, or whitespace-like characters.
-    characters = []
-    for character in text:
-        category = unicodedata.category(character)
-        if category not in replace_categories:
-            category = category[0]
-        replacement = replace_categories.get(category, character)
-        if replacement is not None:
-            characters.append(replacement)
-    text = u''.join(characters)
+    text = category_replace(text, replace_categories)
 
     if collapse:
         # Remove consecutive whitespace.
