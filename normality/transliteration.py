@@ -56,4 +56,4 @@ def latinize_text(text):
 if __name__ == '__main__':
     # Just to sanity-check the system:
     text = u'Порошенко Петро Олексійович'
-    print latinize_text(u'Порошенко Петро Олексійович')
+    print(latinize_text(u'Порошенко Петро Олексійович'))
