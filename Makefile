@@ -1,6 +1,7 @@
 
 
 upload:
+	git push
 	python setup.py sdist bdist_wheel upload
 
 

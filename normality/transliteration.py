@@ -20,7 +20,7 @@ try:
 
     def _latinize_internal(text):
         if not hasattr(latinize_text, '_tr'):
-            rule = 'Any-NFKC; Any-Latin'
+            rule = 'Any-Latin; Latin-ASCII'
             latinize_text._tr = Transliterator.createInstance(rule)
         return latinize_text._tr.transliterate(text)
 
