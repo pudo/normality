@@ -3,6 +3,7 @@ import six
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES
 from normality.transliteration import latinize_text
+from normality.encoding import guess_encoding  # noqa
 
 WS = ' '
 
@@ -30,7 +31,8 @@ def normalize(text, lowercase=True, collapse=True, latinize=False,
 
     # TODO: Python 3?
     if six.PY2 and not isinstance(text, six.text_type):
-        text = text.decode('utf-8')
+        encoding = guess_encoding(text, 'utf-8')
+        text = text.decode(encoding)
 
     if lowercase:
         # Yeah I made a Python package for this.
