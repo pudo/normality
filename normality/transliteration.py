@@ -47,8 +47,8 @@ def latinize_text(text):
     This attempts to convert a given text to latin script using the
     closest match of characters vis a vis the original script.
     """
-    if text is None or not len(text):
-        return
+    if text is None or not isinstance(text, six.string_types) or not len(text):
+        return text
     text = _latinize_internal(text)
     return six.text_type(text)
 
