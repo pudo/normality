@@ -2,13 +2,13 @@ import six
 
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES
-from normality.transliteration import latinize_text
+from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding  # noqa
 
 WS = ' '
 
 
-def normalize(text, lowercase=True, collapse=True, latinize=False,
+def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
               replace_categories=UNICODE_CATEGORIES):
     """The main normalization function for text.
 
@@ -38,7 +38,11 @@ def normalize(text, lowercase=True, collapse=True, latinize=False,
         # Yeah I made a Python package for this.
         text = text.lower()
 
-    if latinize:
+    if ascii:
+        # A stricter form of transliteration that leaves only ASCII
+        # characters.
+        text = ascii_text(text)
+    elif latinize:
         # Perform unicode-based transliteration, e.g. of cyricllic
         # or CJK scripts into latin.
         text = latinize_text(text)
@@ -57,6 +61,6 @@ def normalize(text, lowercase=True, collapse=True, latinize=False,
 
 def slugify(text, sep='-'):
     """A simple slug generator."""
-    text = normalize(text, collapse=True)
+    text = normalize(text, ascii=True)
     if text is not None:
         return text.replace(' ', sep)

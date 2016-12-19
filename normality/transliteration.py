@@ -18,10 +18,15 @@ try:
     # try to use pyicu (i.e. ICU4C)
     from icu import Transliterator
 
-    def _latinize_internal(text):
+    def _latinize_internal(text, ascii=False):
+        if ascii:
+            if not hasattr(latinize_text, '_ascii'):
+                # Transform to latin, separate accents, decompose, remove
+                # symbols, compose, push to ASCII
+                latinize_text._ascii = Transliterator.createInstance('Any-Latin; Accents-Any; NFD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFC; Latin-ASCII')  # noqa
+            return latinize_text._ascii.transliterate(text)
         if not hasattr(latinize_text, '_tr'):
-            rule = 'Any-Latin; Latin-ASCII'
-            latinize_text._tr = Transliterator.createInstance(rule)
+            latinize_text._tr = Transliterator.createInstance('Any-Latin')
         return latinize_text._tr.transliterate(text)
 
 except ImportError:
@@ -29,19 +34,19 @@ except ImportError:
         # try to use unidecode (all Python, hence a bit slower)
         from unidecode import unidecode
 
-        def _latinize_internal(text):
+        def _latinize_internal(text, ascii=False):
             # weirdly, schwa becomes an @ by default in unidecode
             text = text.replace(u'ə', 'a')
-            return unidecode(text)
+            return six.text_type(unidecode(text))
 
     except ImportError:
 
-        def _latinize_internal(text):
+        def _latinize_internal(text, ascii=False):
             warn("No transliteration library is available. Install 'pyicu' or 'unidecode'.", UnicodeWarning)  # noqa
             return text
 
 
-def latinize_text(text):
+def latinize_text(text, ascii=False):
     """Transliterate the given text to the latin script.
 
     This attempts to convert a given text to latin script using the
@@ -49,11 +54,11 @@ def latinize_text(text):
     """
     if text is None or not isinstance(text, six.string_types) or not len(text):
         return text
-    text = _latinize_internal(text)
+    return _latinize_internal(text, ascii=ascii)
+
+
+def ascii_text(text):
+    """Transliterate the given text and make sure it ends up as ASCII."""
+    text = latinize_text(text, ascii=True)
+    text = text.encode('ascii', 'ignore')
     return six.text_type(text)
-
-
-if __name__ == '__main__':
-    # Just to sanity-check the system:
-    text = u'Порошенко Петро Олексійович'
-    print(latinize_text(u'Порошенко Петро Олексійович'))
