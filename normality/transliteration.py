@@ -61,5 +61,7 @@ def latinize_text(text, ascii=False):
 def ascii_text(text):
     """Transliterate the given text and make sure it ends up as ASCII."""
     text = latinize_text(text, ascii=True)
-    text = text.encode('ascii', 'ignore')
-    return six.text_type(text)
+    if isinstance(text, six.text_type):
+        text = text.encode('ascii', 'ignore')
+        text = six.text_type(text)
+    return text
