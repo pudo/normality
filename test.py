@@ -4,6 +4,7 @@ from normality import normalize, latinize_text, ascii_text, slugify
 SAMPLES = [
     u'Порошенко Петро Олексійович',
     u'FUAD ALIYEV ƏHMƏD OĞLU',
+    u'Häschen Spaß',
     u'ავლაბრის ფონდი',
 ]
 

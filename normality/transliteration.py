@@ -23,8 +23,9 @@ try:
             if not hasattr(latinize_text, '_ascii'):
                 # Transform to latin, separate accents, decompose, remove
                 # symbols, compose, push to ASCII
-                latinize_text._ascii = Transliterator.createInstance('Any-Latin; Accents-Any; NFD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFC; Latin-ASCII')  # noqa
+                latinize_text._ascii = Transliterator.createInstance('Any-Latin; NFKD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFKC; Accents-Any; Latin-ASCII')  # noqa
             return latinize_text._ascii.transliterate(text)
+
         if not hasattr(latinize_text, '_tr'):
             latinize_text._tr = Transliterator.createInstance('Any-Latin')
         return latinize_text._tr.transliterate(text)
