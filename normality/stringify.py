@@ -21,10 +21,10 @@ def stringify(value, encoding_default='utf-8', encoding=None):
             return value.isoformat()
         elif isinstance(value, (float, Decimal)):
             return Decimal(value).to_eng_string()
-        elif isinstance(value, six.string_types):
+        elif isinstance(value, six.binary_type):
             if encoding is None:
                 encoding = guess_encoding(value)
-            value = value.decode(encoding, 'replace')
+            value = value.decode(encoding, 'ignore')
             value = remove_byte_order_mark(value)
         else:
             value = six.text_type(value)

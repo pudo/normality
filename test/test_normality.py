@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 from normality import normalize, latinize_text, ascii_text
-from normality import stringify, slugify
+from normality import stringify, slugify, guess_encoding
 
 
 # these tests assume PyICU is installed
@@ -45,6 +45,12 @@ class NormalityTest(unittest.TestCase):
         dt = datetime.utcnow()
         text = stringify(dt)
         self.assertTrue(text.startswith('%s-' % dt.year), text)
+
+    def test_guess_encoding(self):
+        text = u'Порошенко Петро Олексійович'
+        encoded = text.encode('iso-8859-5')
+        out = guess_encoding(encoded)
+        self.assertEqual('iso-8859-5', out)
 
     def test_petro_iso_encoded(self):
         text = u'Порошенко Петро Олексійович'
