@@ -1,4 +1,7 @@
 
+test:
+	python setup.py test
+
 
 upload:
 	git push

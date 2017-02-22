@@ -1,14 +1,12 @@
-import six
-
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES
 from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding  # noqa
-
-WS = ' '
+from normality.stringify import stringify  # noqa
 
 
 def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
+              encoding_default='utf-8', encoding=None,
               replace_categories=UNICODE_CATEGORIES):
     """The main normalization function for text.
 
@@ -26,13 +24,8 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
       given character. It is used to replace any non-text elements of the
       input string.
     """
-    if not isinstance(text, six.string_types):
-        return
-
-    # TODO: Python 3?
-    if six.PY2 and not isinstance(text, six.text_type):
-        encoding = guess_encoding(text, 'utf-8')
-        text = text.decode(encoding)
+    text = stringify(text, encoding_default=encoding_default,
+                     encoding=encoding)
 
     if lowercase:
         # Yeah I made a Python package for this.
@@ -47,6 +40,9 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
         # or CJK scripts into latin.
         text = latinize_text(text)
 
+    if text is None:
+        return
+
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
     # punctuation, or whitespace-like characters.
@@ -55,7 +51,6 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
     if collapse:
         # Remove consecutive whitespace.
         text = collapse_spaces(text)
-
     return text
 
 

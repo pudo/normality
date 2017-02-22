@@ -2,9 +2,10 @@
 import re
 from unicodedata import normalize, category
 
-from normality.constants import UNICODE_CATEGORIES
+from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
+BOM_RE = re.compile(u'^\ufeff', re.U)
 
 try:
     # try to use pyicu (i.e. ICU4C)
@@ -45,6 +46,17 @@ def category_replace(text, replacements=UNICODE_CATEGORIES):
         if replacement is not None:
             characters.append(replacement)
     return u''.join(characters)
+
+
+def remove_control_chars(text):
+    """Remove just the control codes from a piece of text."""
+    text = category_replace(text, replacements=CONTROL_CODES)
+    return text
+
+
+def remove_byte_order_mark(text):
+    """Remove a BOM from the beginning of the text."""
+    return BOM_RE.sub('', text)
 
 
 def collapse_spaces(text):

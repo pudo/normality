@@ -27,3 +27,11 @@ UNICODE_CATEGORIES = {
     'Sk': None,
     'So': None
 }
+
+CONTROL_CODES = {
+    'Cc': None,
+    'Cf': None,
+    'Cs': None,
+    'Co': None,
+    'Cn': None
+}

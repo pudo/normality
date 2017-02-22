@@ -13,7 +13,8 @@ def guess_encoding(text, default=None):
     result = chardet.detect(text)
     if result:
         encoding = result.get('encoding')
-        if encoding.lower().strip() == 'ascii':
+        encoding = encoding.lower().strip()
+        if encoding == 'ascii':
             encoding = 'utf-8'
         return encoding
     return default
