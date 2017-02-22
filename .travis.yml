@@ -5,10 +5,8 @@ cache:
 python:
   - "2.7"
   - "3.6"
-addons:
-  apt:
-    packages:
-      - libicu52
+before_install:
+  - sudo apt-get install libicu-dev -y
 install:
   - pip install pyicu cchardet
   - pip install -e .
