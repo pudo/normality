@@ -9,6 +9,14 @@ from normality import stringify, slugify
 # these tests assume PyICU is installed
 class NormalityTest(unittest.TestCase):
 
+    def test_empty(self):
+        self.assertEqual(None, slugify(None))
+        self.assertEqual(None, ascii_text(None))
+        self.assertEqual(None, latinize_text(None))
+        self.assertEqual(None, normalize(None))
+        self.assertEqual(None, normalize(''))
+        self.assertEqual(None, normalize(' '))
+
     def test_petro(self):
         text = u'Порошенко Петро Олексійович'
         self.assertEqual('porosenko-petro-oleksijovic', slugify(text))
@@ -27,6 +35,11 @@ class NormalityTest(unittest.TestCase):
     def test_german(self):
         text = u'Häschen Spaß'
         self.assertEqual('Haschen Spass', ascii_text(text))
+
+    def test_stringify(self):
+        self.assertEqual('.', stringify(' . '))
+        self.assertEqual('5', stringify(5))
+        self.assertEqual('0.5', stringify(.5))
 
     def test_stringify_datetime(self):
         dt = datetime.utcnow()

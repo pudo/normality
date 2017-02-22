@@ -26,6 +26,8 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
     """
     text = stringify(text, encoding_default=encoding_default,
                      encoding=encoding)
+    if text is None:
+        return
 
     if lowercase:
         # Yeah I made a Python package for this.
