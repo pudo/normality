@@ -29,6 +29,8 @@ def decompose_nfkd(text):
     normalise them, while also separating characters and their diacritics into
     two separate codepoints.
     """
+    if text is None:
+        return None
     return _decompose_nfkd(text)
 
 
@@ -39,6 +41,8 @@ def category_replace(text, replacements=UNICODE_CATEGORIES):
     whitespace, marks and diacritics) from a piece of text by class, rather
     than specifying them individually.
     """
+    if text is None:
+        return None
     characters = []
     for character in decompose_nfkd(text):
         cat = category(character)
@@ -50,8 +54,7 @@ def category_replace(text, replacements=UNICODE_CATEGORIES):
 
 def remove_control_chars(text):
     """Remove just the control codes from a piece of text."""
-    text = category_replace(text, replacements=CONTROL_CODES)
-    return text
+    return category_replace(text, replacements=CONTROL_CODES)
 
 
 def remove_byte_order_mark(text):

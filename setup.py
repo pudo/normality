@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='normality',
-    version='0.4.1',
+    version='0.4.2',
     description="Micro-library to normalize text strings",
     long_description="",
     classifiers=[
