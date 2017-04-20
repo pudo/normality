@@ -1,5 +1,5 @@
 from normality.cleaning import collapse_spaces, category_replace
-from normality.constants import UNICODE_CATEGORIES
+from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding  # noqa
 from normality.stringify import stringify  # noqa
@@ -58,6 +58,11 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
 
 def slugify(text, sep='-'):
     """A simple slug generator."""
+    text = stringify(text)
+    if text is None:
+        return None
+    text = text.replace(sep, WS)
     text = normalize(text, ascii=True)
-    if text is not None:
-        return text.replace(' ', sep)
+    if text is None:
+        return None
+    return text.replace(WS, sep)

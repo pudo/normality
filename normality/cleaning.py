@@ -2,7 +2,7 @@
 import re
 from unicodedata import normalize, category
 
-from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES
+from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile(u'^\ufeff', re.U)
@@ -61,4 +61,4 @@ def remove_byte_order_mark(text):
 
 def collapse_spaces(text):
     """Remove newlines, tabs and multiple spaces with single spaces."""
-    return COLLAPSE_RE.sub(' ', text).strip(' ')
+    return COLLAPSE_RE.sub(WS, text).strip(WS)

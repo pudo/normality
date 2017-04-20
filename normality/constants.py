@@ -1,4 +1,6 @@
 
+WS = ' '
+
 # Unicode character classes, see:
 # http://www.fileformat.info/info/unicode/category/index.htm
 # https://en.wikipedia.org/wiki/Unicode_character_property

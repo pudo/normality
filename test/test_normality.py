@@ -28,6 +28,10 @@ class NormalityTest(unittest.TestCase):
         text = u'FUAD ALIYEV ƏHMƏD OĞLU'
         self.assertEqual('FUAD ALIYEV AHMAD OGLU', ascii_text(text))
 
+    def test_slugify(self):
+        text = u'BABY! camel-is good'
+        self.assertEqual('baby-camel-is-good', slugify(text, sep='-'))
+
     def test_georgian(self):
         text = u'ავლაბრის ფონდი'
         self.assertEqual('avlabris pondi', ascii_text(text))
