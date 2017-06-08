@@ -8,7 +8,7 @@ python:
 before_install:
   - sudo apt-get install libicu-dev -y
 install:
-  - pip install pyicu cchardet
+  - pip install PyICU==1.9.3 cchardet
   - pip install -e .
   - pip install nose coveralls
 script:
