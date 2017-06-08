@@ -1,5 +1,6 @@
 # coding: utf-8
 import re
+import six
 from unicodedata import normalize, category
 
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
@@ -64,4 +65,6 @@ def remove_byte_order_mark(text):
 
 def collapse_spaces(text):
     """Remove newlines, tabs and multiple spaces with single spaces."""
+    if not isinstance(text, six.string_types):
+        return
     return COLLAPSE_RE.sub(WS, text).strip(WS)
