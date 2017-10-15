@@ -3,6 +3,7 @@ from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding  # noqa
 from normality.stringify import stringify  # noqa
+from normality.paths import safe_filename  # noqa
 
 
 def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
