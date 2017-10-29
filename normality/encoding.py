@@ -18,3 +18,24 @@ def guess_encoding(text, default='utf-8'):
             if encoding != 'ascii':
                 return encoding
     return default
+
+
+def guess_file_encoding(fh, default='utf-8'):
+    """Guess encoding from a file handle."""
+    start = fh.tell()
+    detector = chardet.UniversalDetector()
+    for idx in xrange(1024):
+        data = fh.read(1024)
+        if not len(data):
+            break
+        detector.feed(data)
+        if detector.done:
+            break
+
+    detector.close()
+    fh.seek(start)
+    result = detector.result
+    if result.get('confidence') < 0.2:
+        return default
+    encoding = result.get('encoding') or default
+    return encoding.lower()

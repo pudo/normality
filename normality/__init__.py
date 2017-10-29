@@ -1,7 +1,7 @@
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
-from normality.encoding import guess_encoding  # noqa
+from normality.encoding import guess_encoding, guess_file_encoding  # noqa
 from normality.stringify import stringify  # noqa
 from normality.paths import safe_filename  # noqa
 

@@ -19,7 +19,7 @@ def _safe_name(file_name, sep):
         return
 
     file_name = file_name.replace(WS, sep)
-    return file_name[:250]
+    return file_name[:200]
 
 
 def safe_filename(file_name, sep='_', default=None, extension=None):
