@@ -1,26 +1,40 @@
+import io
 try:
     import cchardet as chardet
 except ImportError:
     import chardet
 
+DEFAULT_ENCODING = 'utf-8'
 
-def guess_encoding(text, default='utf-8'):
+
+def normalize_encoding(encoding, default):
+    """Normalize the encoding name, replace ASCII w/ UTF-8."""
+    if encoding is None:
+        return default
+    encoding = encoding.lower().strip()
+    if encoding in ['', 'ascii']:
+        return default
+    return encoding
+
+
+def normalize_result(result, default, threshold=0.2):
+    """Interpret a chardet result."""
+    if result is None or result.get('confidence') < threshold:
+        return default
+    return normalize_encoding(result.get('encoding'), default)
+
+
+def guess_encoding(text, default=DEFAULT_ENCODING):
     """Guess string encoding.
 
     Given a piece of text, apply character encoding detection to
     guess the appropriate encoding of the text.
     """
     result = chardet.detect(text)
-    if result:
-        encoding = result.get('encoding')
-        if encoding is not None:
-            encoding = encoding.lower().strip()
-            if encoding != 'ascii':
-                return encoding
-    return default
+    return normalize_result(result, default)
 
 
-def guess_file_encoding(fh, default='utf-8'):
+def guess_file_encoding(fh, default=DEFAULT_ENCODING):
     """Guess encoding from a file handle."""
     start = fh.tell()
     detector = chardet.UniversalDetector()
@@ -34,8 +48,10 @@ def guess_file_encoding(fh, default='utf-8'):
 
     detector.close()
     fh.seek(start)
-    result = detector.result
-    if result.get('confidence') < 0.2:
-        return default
-    encoding = result.get('encoding') or default
-    return encoding.lower()
+    return normalize_result(detector.result, default)
+
+
+def guess_path_encoding(file_path, default=DEFAULT_ENCODING):
+    """Wrapper to open that damn file for you, lazy bastard."""
+    with io.open(file_path, 'r') as fh:
+        return guess_file_encoding(fh, default=default)

@@ -31,9 +31,9 @@ UNICODE_CATEGORIES = {
 }
 
 CONTROL_CODES = {
-    'Cc': None,
-    'Cf': None,
-    'Cs': None,
-    'Co': None,
-    'Cn': None
+    'Cc': WS,
+    'Cf': WS,
+    'Cs': WS,
+    'Co': WS,
+    'Cn': WS
 }
