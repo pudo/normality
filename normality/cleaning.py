@@ -7,6 +7,7 @@ from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile(u'^\ufeff', re.U)
+UNSAFE_RE = re.compile(u'\x00', re.U)
 
 try:
     # try to use pyicu (i.e. ICU4C)
@@ -56,6 +57,13 @@ def category_replace(text, replacements=UNICODE_CATEGORIES):
 def remove_control_chars(text):
     """Remove just the control codes from a piece of text."""
     return category_replace(text, replacements=CONTROL_CODES)
+
+
+def remove_unsafe_chars(text):
+    """Remove unsafe unicode characters from a piece of text."""
+    if isinstance(text, six.string_types):
+        text = UNSAFE_RE.sub('', text)
+    return text
 
 
 def remove_byte_order_mark(text):

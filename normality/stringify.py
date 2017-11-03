@@ -3,6 +3,7 @@ from datetime import datetime, date
 from decimal import Decimal
 
 from normality.cleaning import remove_byte_order_mark
+from normality.cleaning import remove_unsafe_chars
 from normality.encoding import guess_encoding
 
 
@@ -23,12 +24,13 @@ def stringify(value, encoding_default='utf-8', encoding=None):
             return Decimal(value).to_eng_string()
         elif isinstance(value, six.binary_type):
             if encoding is None:
-                encoding = guess_encoding(value)
-            value = value.decode(encoding, 'ignore')
+                encoding = guess_encoding(value, default=encoding_default)
+            value = value.decode(encoding, 'replace')
             value = remove_byte_order_mark(value)
         else:
             value = six.text_type(value)
 
+    value = remove_unsafe_chars(value)
     # XXX: is this really a good idea?
     value = value.strip()
     if not len(value):
