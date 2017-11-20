@@ -10,7 +10,7 @@ from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile('^\ufeff', re.U)
 UNSAFE_RE = re.compile('\x00', re.U)
-QUOTES_RE = re.compile('["\'](.*)["\']')
+QUOTES_RE = re.compile('^["\'](.*)["\']$')
 
 try:
     # try to use pyicu (i.e. ICU4C)
