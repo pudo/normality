@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 import re
 import six
 from unicodedata import normalize, category
@@ -6,8 +8,9 @@ from unicodedata import normalize, category
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
-BOM_RE = re.compile(u'^\ufeff', re.U)
-UNSAFE_RE = re.compile(u'\x00', re.U)
+BOM_RE = re.compile('^\ufeff', re.U)
+UNSAFE_RE = re.compile('\x00', re.U)
+QUOTES_RE = re.compile('["\'](.*)["\']')
 
 try:
     # try to use pyicu (i.e. ICU4C)
@@ -18,10 +21,18 @@ try:
             _decompose_nfkd._tr = Transliterator.createInstance('Any-NFKD')
         return _decompose_nfkd._tr.transliterate(text)
 
+    def _compose_nfc(text):
+        if not hasattr(_compose_nfc, '_tr'):
+            _compose_nfc._tr = Transliterator.createInstance('Any-NFC')
+        return _compose_nfc._tr.transliterate(text)
+
 except ImportError:
 
     def _decompose_nfkd(text):
         return normalize('NFKD', text)
+
+    def _compose_nfc(text):
+        return normalize('NFC', text)
 
 
 def decompose_nfkd(text):
@@ -34,6 +45,20 @@ def decompose_nfkd(text):
     if text is None:
         return None
     return _decompose_nfkd(text)
+
+
+def compose_nfc(text):
+    """Perform unicode composition."""
+    if text is None:
+        return None
+    return _compose_nfc(text)
+
+
+def strip_quotes(text):
+    """Remove double or single quotes surrounding a string."""
+    if text is None:
+        return
+    return QUOTES_RE.sub('\\1', text)
 
 
 def category_replace(text, replacements=UNICODE_CATEGORIES):

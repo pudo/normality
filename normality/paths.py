@@ -31,9 +31,9 @@ def safe_filename(file_name, sep='_', default=None, extension=None):
     file_name = os.path.basename(file_name)
     file_name, _extension = os.path.splitext(file_name)
     file_name = _safe_name(file_name, sep=sep) or decode_path(default)
-    extension = _safe_name(extension or _extension, sep=sep)
-    if extension and len(file_name):
-        file_name = '.'.join((file_name, extension))
     if file_name is None:
-        return default
+        return decode_path(default)
+    extension = _safe_name(extension or _extension, sep=sep)
+    if extension is not None:
+        file_name = '.'.join((file_name, extension))
     return file_name
