@@ -1,4 +1,5 @@
 import io
+import six
 try:
     import cchardet as chardet
 except ImportError:
@@ -38,7 +39,7 @@ def guess_file_encoding(fh, default=DEFAULT_ENCODING):
     """Guess encoding from a file handle."""
     start = fh.tell()
     detector = chardet.UniversalDetector()
-    for idx in xrange(1024):
+    for idx in six.moves.range(1024):
         data = fh.read(1024)
         if not len(data):
             break
