@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 from normality import normalize, latinize_text, ascii_text
-from normality import stringify, slugify, guess_encoding
+from normality import stringify, slugify, guess_encoding, guess_file_encoding
 
 
 # these tests assume PyICU is installed
@@ -55,6 +55,11 @@ class NormalityTest(unittest.TestCase):
         encoded = text.encode('iso-8859-5')
         out = guess_encoding(encoded)
         self.assertEqual('iso-8859-5', out)
+
+    def test_guess_file_encoding(self):
+        with open("test/fixtures/utf-16.txt", "rb") as fh:
+            out = guess_file_encoding(fh)
+            self.assertEqual("utf-16", out)
 
     def test_petro_iso_encoded(self):
         text = u'Порошенко Петро Олексійович'
