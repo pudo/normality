@@ -1,5 +1,6 @@
 import io
 import six
+import codecs
 try:
     import cchardet as chardet
 except ImportError:
@@ -15,7 +16,11 @@ def normalize_encoding(encoding, default):
     encoding = encoding.lower().strip()
     if encoding in ['', 'ascii']:
         return default
-    return encoding
+    try:
+        codecs.lookup(encoding)
+        return encoding
+    except LookupError:
+        return default
 
 
 def normalize_result(result, default, threshold=0.2):
