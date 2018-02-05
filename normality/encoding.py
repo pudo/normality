@@ -9,7 +9,7 @@ except ImportError:
 DEFAULT_ENCODING = 'utf-8'
 
 
-def normalize_encoding(encoding, default):
+def normalize_encoding(encoding, default=DEFAULT_ENCODING):
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
     if encoding is None:
         return default
@@ -27,7 +27,8 @@ def normalize_result(result, default, threshold=0.2):
     """Interpret a chardet result."""
     if result is None or result.get('confidence') < threshold:
         return default
-    return normalize_encoding(result.get('encoding'), default)
+    return normalize_encoding(result.get('encoding'),
+                              default=default)
 
 
 def guess_encoding(text, default=DEFAULT_ENCODING):
@@ -37,7 +38,7 @@ def guess_encoding(text, default=DEFAULT_ENCODING):
     guess the appropriate encoding of the text.
     """
     result = chardet.detect(text)
-    return normalize_result(result, default)
+    return normalize_result(result, default=default)
 
 
 def guess_file_encoding(fh, default=DEFAULT_ENCODING):
@@ -54,7 +55,7 @@ def guess_file_encoding(fh, default=DEFAULT_ENCODING):
 
     detector.close()
     fh.seek(start)
-    return normalize_result(detector.result, default)
+    return normalize_result(detector.result, default=default)
 
 
 def guess_path_encoding(file_path, default=DEFAULT_ENCODING):
