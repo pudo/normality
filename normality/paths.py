@@ -5,21 +5,20 @@ from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import ascii_text
 
+MAX_LENGTH = 252
+
 
 def _safe_name(file_name, sep):
     """Convert the file name to ASCII and normalize the string."""
     file_name = stringify(file_name)
     if file_name is None:
         return
-
     file_name = ascii_text(file_name)
     file_name = category_replace(file_name, UNICODE_CATEGORIES)
     file_name = collapse_spaces(file_name)
     if file_name is None or not len(file_name):
         return
-
-    file_name = file_name.replace(WS, sep)
-    return file_name[:200]
+    return file_name.replace(WS, sep)
 
 
 def safe_filename(file_name, sep='_', default=None, extension=None):
@@ -33,7 +32,11 @@ def safe_filename(file_name, sep='_', default=None, extension=None):
     file_name = _safe_name(file_name, sep=sep)
     if file_name is None:
         return decode_path(default)
+    file_name = file_name[:MAX_LENGTH]
     extension = _safe_name(extension or _extension, sep=sep)
     if extension is not None:
+        if MAX_LENGTH <= (len(file_name) + len(extension)):
+            extension = extension[:(MAX_LENGTH - len(file_name) - 1)]
+            file_name = file_name[:(MAX_LENGTH - len(extension) - 1)]
         file_name = '.'.join((file_name, extension))
     return file_name
