@@ -18,7 +18,7 @@ UNICODE_CATEGORIES = {
     'Zs': WS,
     'Zl': WS,
     'Zp': WS,
-    'Pc': None,
+    'Pc': WS,
     'Pd': WS,
     'Ps': WS,
     'Pe': WS,

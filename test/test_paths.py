@@ -11,6 +11,8 @@ class PathsTest(unittest.TestCase):
         self.assertEqual('test.txt', safe_filename('test.txt'))
         self.assertEqual('test.txt', safe_filename('test .txt'))
         self.assertEqual('test_bla.txt', safe_filename('test bla.txt'))
+        self.assertEqual('test_bla.txt', safe_filename('test_bla.txt'))
+        self.assertEqual('test_bla.txt', safe_filename('test.bla.txt'))
         self.assertEqual('test.txt', safe_filename('test', extension='txt'))
 
     def test_long_filename(self):
