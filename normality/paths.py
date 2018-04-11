@@ -5,7 +5,7 @@ from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import ascii_text
 
-MAX_LENGTH = 252
+MAX_LENGTH = 254
 
 
 def _safe_name(file_name, sep):
