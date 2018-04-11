@@ -35,8 +35,6 @@ def safe_filename(file_name, sep='_', default=None, extension=None):
     file_name = file_name[:MAX_LENGTH]
     extension = _safe_name(extension or _extension, sep=sep)
     if extension is not None:
-        if MAX_LENGTH <= (len(file_name) + len(extension)):
-            extension = extension[:(MAX_LENGTH - len(file_name) - 1)]
-            file_name = file_name[:(MAX_LENGTH - len(extension) - 1)]
         file_name = '.'.join((file_name, extension))
+        file_name = file_name[:MAX_LENGTH]
     return file_name

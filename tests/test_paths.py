@@ -27,4 +27,6 @@ class PathsTest(unittest.TestCase):
 
         shortened = safe_filename('bla', extension=long_name)
         assert len(shortened) <= MAX_LENGTH, shortened
-        # assert False, shortened
+
+        shortened = safe_filename(long_name, extension=long_name)
+        assert len(shortened) <= MAX_LENGTH, shortened

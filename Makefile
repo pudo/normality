@@ -1,11 +1,11 @@
 
 all: clean test dists
 
-build:
-	python fetch.py
+install:
+	pip install -q --upgrade twine pytest
 
-test:
-	python test.py
+test: install
+	pytest
 
 dists:
 	python setup.py sdist bdist_wheel

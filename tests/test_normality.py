@@ -57,7 +57,7 @@ class NormalityTest(unittest.TestCase):
         self.assertEqual('iso-8859-5', out)
 
     def test_guess_file_encoding(self):
-        with open("test/fixtures/utf-16.txt", "rb") as fh:
+        with open("tests/fixtures/utf-16.txt", "rb") as fh:
             out = guess_file_encoding(fh)
             self.assertEqual("utf-16", out)
 
