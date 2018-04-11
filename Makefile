@@ -7,7 +7,7 @@ install:
 test: install
 	pytest
 
-dists:
+dists: clean
 	python setup.py sdist bdist_wheel
 
 release: dists
