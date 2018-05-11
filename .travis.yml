@@ -1,17 +1,26 @@
 language: python
+
 cache:
   - apt
   - pip
+
 python:
   - "2.7"
   - "3.6"
+
 before_install:
   - sudo apt-get install libicu-dev -y
+
 install:
-  - pip install PyICU==1.9.3 cchardet
+  - pip install --upgrade -q PyICU==2.0.3 cchardet six twine nose coveralls
   - pip install -e .
-  - pip install nose coveralls
+
 script:
   - nosetests --with-coverage --cover-package=normality
+
 after_success:
   - coveralls
+  - if [[ $TRAVIS_TAG = $TRAVIS_BRANCH ]]; then
+      python setup.py sdist bdist_wheel ;
+      twine upload dist/* ;
+    fi

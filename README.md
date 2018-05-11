@@ -12,18 +12,19 @@ a preparation to further text analysis.
 
 ```python
 # coding: utf-8
-from normality import normalize, slugify
+from normality import normalize, slugify, collapse_spaces
 
 text = normalize('Nie wieder "Grüne Süppchen" kochen!')
 assert text == 'nie wieder grune suppchen kochen'
 
 slug = slugify('My first blog post!')
 assert slug == 'my-first-blog-post'
+
+text = 'this \n\n\r\nhas\tlots of \nodd spacing.'
+assert collapse_spaces(text) == 'this has lots of odd spacing.'
 ```
 
 ## Extended usage
-
-Read the source code, it's twenty lines of stuff.
 
 ![RTSL](http://cdn.meme.am/instances/500x/58064648.jpg)
 
