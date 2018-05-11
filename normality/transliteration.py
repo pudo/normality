@@ -32,18 +32,27 @@ try:
 
 except ImportError:
     try:
-        # try to use unidecode (all Python, hence a bit slower)
-        from unidecode import unidecode
+        # try to use text_unidecode or unidecode (all Python, hence a bit slower)
+        try:
+            from text_unidecode import unidecode
 
-        def _latinize_internal(text, ascii=False):
-            # weirdly, schwa becomes an @ by default in unidecode
-            text = text.replace(u'ə', 'a')
-            return six.text_type(unidecode(text))
+            def _latinize_internal(text, ascii=False):
+                # weirdly, schwa becomes an @ by default in text_unidecode
+                text = text.replace(u'ə', 'a')
+                text = text.replace(u'Ə', 'A')
+                return six.text_type(unidecode(text))
+        except ImportError:
+            from unidecode import unidecode
+
+            def _latinize_internal(text, ascii=False):
+                # weirdly, schwa becomes an @ by default in unidecode
+                text = text.replace(u'ə', 'a')
+                return six.text_type(unidecode(text))
 
     except ImportError:
 
         def _latinize_internal(text, ascii=False):
-            warn("No transliteration library is available. Install 'pyicu' or 'unidecode'.", UnicodeWarning)  # noqa
+            warn("No transliteration library is available. Install 'pyicu' or 'text_unidecode' or 'unidecode'.", UnicodeWarning)  # noqa
             return text
 
 
