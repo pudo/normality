@@ -28,7 +28,7 @@ class NormalityTest(unittest.TestCase):
         text = u'əhməd'
         self.assertEqual('ahmad', ascii_text(text))
 
-    def test_AHMAD(self):
+    def test_azeri(self):
         text = u'FUAD ALIYEV ƏHMƏD OĞLU'
         self.assertEqual('FUAD ALIYEV AHMAD OGLU', ascii_text(text))
 
