@@ -25,7 +25,9 @@ def normalize_encoding(encoding, default=DEFAULT_ENCODING):
 
 def normalize_result(result, default, threshold=0.2):
     """Interpret a chardet result."""
-    if result is None or result.get('confidence') < threshold:
+    if (result is None or
+        result.get('confidence') is None or
+            result.get('confidence') < threshold):
         return default
     return normalize_encoding(result.get('encoding'),
                               default=default)
