@@ -32,7 +32,8 @@ try:
 
 except ImportError:
     try:
-        # try to use text_unidecode or unidecode (all Python, hence a bit slower)
+        # try to use text_unidecode or unidecode (all Python, hence a bit
+        # slower and less precise than the ICU version)
         try:
             from text_unidecode import unidecode
 

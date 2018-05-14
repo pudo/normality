@@ -27,10 +27,10 @@ def stringify(value, encoding_default='utf-8', encoding=None):
                 encoding = guess_encoding(value, default=encoding_default)
             value = value.decode(encoding, 'replace')
             value = remove_byte_order_mark(value)
+            value = remove_unsafe_chars(value)
         else:
             value = six.text_type(value)
 
-    value = remove_unsafe_chars(value)
     # XXX: is this really a good idea?
     value = value.strip()
     if not len(value):
