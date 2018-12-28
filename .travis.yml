@@ -1,7 +1,6 @@
 language: python
 
 cache:
-  - apt
   - pip
 
 python:
@@ -12,7 +11,7 @@ before_install:
   - sudo apt-get install libicu-dev -y
 
 install:
-  - pip install --upgrade -q PyICU==2.0.3 cchardet six twine nose coveralls
+  - pip install --upgrade -q PyICU cchardet six twine nose coveralls
   - pip install -e .
 
 script:

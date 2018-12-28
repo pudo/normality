@@ -12,10 +12,10 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7'
     ],
     keywords='text unicode normalization slugs',
     author='Friedrich Lindenberg',
@@ -28,7 +28,8 @@ setup(
     zip_safe=True,
     install_requires=[
         'six >= 1.11.0',
-        'banal',
+        'banal >= 0.4.1',
+        'pyicu >= 1.9.3',
         'chardet'
     ],
     tests_require=[],

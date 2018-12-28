@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 import re
 import six
-from unicodedata import normalize, category
+from icu import Transliterator
+from unicodedata import category
 
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
@@ -11,28 +12,6 @@ COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile('^\ufeff', re.U)
 UNSAFE_RE = re.compile('\x00', re.U)
 QUOTES_RE = re.compile('^["\'](.*)["\']$')
-
-try:
-    # try to use pyicu (i.e. ICU4C)
-    from icu import Transliterator
-
-    def _decompose_nfkd(text):
-        if not hasattr(_decompose_nfkd, '_tr'):
-            _decompose_nfkd._tr = Transliterator.createInstance('Any-NFKD')
-        return _decompose_nfkd._tr.transliterate(text)
-
-    def _compose_nfc(text):
-        if not hasattr(_compose_nfc, '_tr'):
-            _compose_nfc._tr = Transliterator.createInstance('Any-NFC')
-        return _compose_nfc._tr.transliterate(text)
-
-except ImportError:
-
-    def _decompose_nfkd(text):
-        return normalize('NFKD', text)
-
-    def _compose_nfc(text):
-        return normalize('NFC', text)
 
 
 def decompose_nfkd(text):
@@ -44,14 +23,18 @@ def decompose_nfkd(text):
     """
     if text is None:
         return None
-    return _decompose_nfkd(text)
+    if not hasattr(decompose_nfkd, '_tr'):
+        decompose_nfkd._tr = Transliterator.createInstance('Any-NFKD')
+    return decompose_nfkd._tr.transliterate(text)
 
 
 def compose_nfc(text):
     """Perform unicode composition."""
     if text is None:
         return None
-    return _compose_nfc(text)
+    if not hasattr(compose_nfc, '_tr'):
+        compose_nfc._tr = Transliterator.createInstance('Any-NFC')
+    return compose_nfc._tr.transliterate(text)
 
 
 def strip_quotes(text):
