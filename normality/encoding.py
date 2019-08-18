@@ -5,6 +5,15 @@ import chardet
 DEFAULT_ENCODING = 'utf-8'
 
 
+def _is_encoding_codec(encoding):
+    """Check if a given string is a valid encoding name."""
+    try:
+        codecs.lookup(encoding)
+        return True
+    except LookupError:
+        return False
+
+
 def normalize_encoding(encoding, default=DEFAULT_ENCODING):
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
     if encoding is None:
@@ -12,11 +21,12 @@ def normalize_encoding(encoding, default=DEFAULT_ENCODING):
     encoding = encoding.lower().strip()
     if encoding in ['', 'ascii']:
         return default
-    try:
-        codecs.lookup(encoding)
+    if _is_encoding_codec(encoding):
         return encoding
-    except LookupError:
-        return default
+    encoding = encoding.replace('-', '')
+    if _is_encoding_codec(encoding):
+        return encoding
+    return default
 
 
 def normalize_result(result, default, threshold=0.2):
