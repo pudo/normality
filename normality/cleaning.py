@@ -10,7 +10,7 @@ from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile('^\ufeff', re.U)
-UNSAFE_RE = re.compile('\x00', re.U)
+UNSAFE_RE = re.compile(r'^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f]')
 QUOTES_RE = re.compile('^["\'](.*)["\']$')
 
 
@@ -35,6 +35,15 @@ def compose_nfc(text):
     if not hasattr(compose_nfc, '_tr'):
         compose_nfc._tr = Transliterator.createInstance('Any-NFC')
     return compose_nfc._tr.transliterate(text)
+
+
+def compose_nfkc(text):
+    """Perform unicode composition."""
+    if text is None:
+        return None
+    if not hasattr(compose_nfkc, '_tr'):
+        compose_nfkc._tr = Transliterator.createInstance('Any-NFKC')
+    return compose_nfkc._tr.transliterate(text)
 
 
 def strip_quotes(text):
@@ -76,7 +85,9 @@ def remove_unsafe_chars(text):
 
 def remove_byte_order_mark(text):
     """Remove a BOM from the beginning of the text."""
-    return BOM_RE.sub('', text)
+    if isinstance(text, six.string_types):
+        text = BOM_RE.sub('', text)
+    return text
 
 
 def collapse_spaces(text):
