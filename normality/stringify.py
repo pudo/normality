@@ -2,7 +2,6 @@ import six
 from datetime import datetime, date
 from decimal import Decimal
 
-from normality.cleaning import remove_byte_order_mark
 from normality.cleaning import remove_unsafe_chars
 from normality.encoding import guess_encoding
 
@@ -26,7 +25,6 @@ def stringify(value, encoding_default='utf-8', encoding=None):
             if encoding is None:
                 encoding = guess_encoding(value, default=encoding_default)
             value = value.decode(encoding, 'replace')
-            value = remove_byte_order_mark(value)
             value = remove_unsafe_chars(value)
         else:
             value = six.text_type(value)
