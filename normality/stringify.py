@@ -4,9 +4,10 @@ from decimal import Decimal
 
 from normality.cleaning import remove_unsafe_chars
 from normality.encoding import guess_encoding
+from normality.encoding import DEFAULT_ENCODING
 
 
-def stringify(value, encoding_default='utf-8', encoding=None):
+def stringify(value, encoding_default=DEFAULT_ENCODING, encoding=None):
     """Brute-force convert a given object to a string.
 
     This will attempt an increasingly mean set of conversions to make a given
