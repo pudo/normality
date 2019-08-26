@@ -3,15 +3,14 @@ from __future__ import unicode_literals
 
 import re
 import six
-from icu import Transliterator
-from unicodedata import category
+import unicodedata
 
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 
 COLLAPSE_RE = re.compile(r'\s+', re.U)
 BOM_RE = re.compile('^\ufeff', re.U)
 UNSAFE_RE = re.compile(r'^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f]')
-QUOTES_RE = re.compile('^["\'](.*)["\']$')
+QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
 
 
 def decompose_nfkd(text):
@@ -21,36 +20,26 @@ def decompose_nfkd(text):
     normalise them, while also separating characters and their diacritics into
     two separate codepoints.
     """
-    if text is None:
-        return None
-    if not hasattr(decompose_nfkd, '_tr'):
-        decompose_nfkd._tr = Transliterator.createInstance('Any-NFKD')
-    return decompose_nfkd._tr.transliterate(text)
+    if is_text(text):
+        return unicodedata.normalize('NFKD', text)
 
 
 def compose_nfc(text):
     """Perform unicode composition."""
-    if text is None:
-        return None
-    if not hasattr(compose_nfc, '_tr'):
-        compose_nfc._tr = Transliterator.createInstance('Any-NFC')
-    return compose_nfc._tr.transliterate(text)
+    if is_text(text):
+        return unicodedata.normalize('NFC', text)
 
 
 def compose_nfkc(text):
     """Perform unicode composition."""
-    if text is None:
-        return None
-    if not hasattr(compose_nfkc, '_tr'):
-        compose_nfkc._tr = Transliterator.createInstance('Any-NFKC')
-    return compose_nfkc._tr.transliterate(text)
+    if is_text(text):
+        return unicodedata.normalize('NFKC', text)
 
 
 def strip_quotes(text):
     """Remove double or single quotes surrounding a string."""
-    if text is None:
-        return
-    return QUOTES_RE.sub('\\1', text)
+    if is_text(text):
+        return QUOTES_RE.sub('\\1', text)
 
 
 def category_replace(text, replacements=UNICODE_CATEGORIES):
@@ -60,11 +49,11 @@ def category_replace(text, replacements=UNICODE_CATEGORIES):
     whitespace, marks and diacritics) from a piece of text by class, rather
     than specifying them individually.
     """
-    if text is None:
+    if not is_text(text):
         return None
     characters = []
     for character in decompose_nfkd(text):
-        cat = category(character)
+        cat = unicodedata.category(character)
         replacement = replacements.get(cat, character)
         if replacement is not None:
             characters.append(replacement)
@@ -78,20 +67,21 @@ def remove_control_chars(text):
 
 def remove_unsafe_chars(text):
     """Remove unsafe unicode characters from a piece of text."""
-    if isinstance(text, six.string_types):
-        text = UNSAFE_RE.sub('', text)
-    return text
+    if is_text(text):
+        return UNSAFE_RE.sub('', text)
 
 
 def remove_byte_order_mark(text):
     """Remove a BOM from the beginning of the text."""
-    if isinstance(text, six.string_types):
-        text = BOM_RE.sub('', text)
-    return text
+    if is_text(text):
+        return BOM_RE.sub('', text)
 
 
 def collapse_spaces(text):
     """Remove newlines, tabs and multiple spaces with single spaces."""
-    if not isinstance(text, six.string_types):
-        return text
-    return COLLAPSE_RE.sub(WS, text).strip(WS)
+    if is_text(text):
+        return COLLAPSE_RE.sub(WS, text).strip(WS)
+
+
+def is_text(data):
+    return isinstance(data, six.text_type)
