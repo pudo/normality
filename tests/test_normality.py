@@ -8,6 +8,9 @@ from normality import stringify, slugify, guess_encoding, guess_file_encoding
 
 
 # these tests assume PyICU is installed
+import icu  # noqa
+
+
 class NormalityTest(unittest.TestCase):
 
     def test_empty(self):

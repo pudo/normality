@@ -29,10 +29,14 @@ setup(
     install_requires=[
         'six >= 1.11.0',
         'banal >= 0.4.1',
-        'pyicu >= 1.9.3',
+        'text-unidecode',
         'chardet'
     ],
-    tests_require=[],
+    extras_require={
+        'icu': [
+            'pyicu >= 1.9.3',
+        ],
+    },
     test_suite='test',
     entry_points={
     }
