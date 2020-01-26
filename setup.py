@@ -1,11 +1,14 @@
 from setuptools import setup, find_packages
 
+with open('README.md') as f:
+    long_description = f.read()
 
 setup(
     name='normality',
     version='2.0.0',
     description="Micro-library to normalize text strings",
-    long_description="",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
