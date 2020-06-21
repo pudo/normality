@@ -1,6 +1,6 @@
 import io
 import codecs
-import chardet
+import chardet  # type: ignore
 
 DEFAULT_ENCODING = 'utf-8'
 

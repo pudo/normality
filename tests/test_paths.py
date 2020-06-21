@@ -1,4 +1,3 @@
-# coding: utf-8
 import unittest
 
 from normality.paths import MAX_LENGTH, safe_filename

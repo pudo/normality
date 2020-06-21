@@ -1,14 +1,8 @@
-# coding: utf-8
-from __future__ import unicode_literals
 import unittest
 from datetime import datetime
 
 from normality import normalize, latinize_text, ascii_text
 from normality import stringify, slugify, guess_encoding, guess_file_encoding
-
-
-# these tests assume PyICU is installed
-import icu  # noqa
 
 
 class NormalityTest(unittest.TestCase):

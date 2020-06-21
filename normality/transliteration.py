@@ -51,11 +51,11 @@ def ascii_text(text):
 
 def make_transliterator(script):
     try:
-        from icu import Transliterator
+        from icu import Transliterator  # type: ignore
         inst = Transliterator.createInstance(script)
         return inst.transliterate
     except ImportError:
-        from text_unidecode import unidecode
+        from text_unidecode import unidecode  # type: ignore
         warnings.warn("Install 'pyicu' for better text transliteration.", ICUWarning, stacklevel=4)  # noqa
 
         def transliterate(text):
