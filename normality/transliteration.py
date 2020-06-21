@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Transliterate the given text to the latin script.
 
@@ -12,6 +11,8 @@ dependency, this module requires neither but will use a package
 if it is installed.
 """
 import warnings
+from typing import Optional
+
 from normality.cleaning import compose_nfkc, is_text
 
 # Transform to latin, separate accents, decompose, remove
@@ -23,7 +24,7 @@ class ICUWarning(UnicodeWarning):
     pass
 
 
-def latinize_text(text, ascii=False):
+def latinize_text(text: Optional[str], ascii=False) -> Optional[str]:
     """Transliterate the given text to the latin script.
 
     This attempts to convert a given text to latin script using the
@@ -34,22 +35,23 @@ def latinize_text(text, ascii=False):
 
     if ascii:
         if not hasattr(latinize_text, '_ascii'):
-            latinize_text._ascii = make_transliterator(ASCII_SCRIPT)
-        return latinize_text._ascii(text)
+            latinize_text._ascii = make_trans(ASCII_SCRIPT)  # type: ignore
+        return latinize_text._ascii(text)  # type: ignore
 
     if not hasattr(latinize_text, '_tr'):
-        latinize_text._tr = make_transliterator('Any-Latin')
-    return latinize_text._tr(text)
+        latinize_text._tr = make_trans('Any-Latin')  # type: ignore
+    return latinize_text._tr(text)  # type: ignore
 
 
-def ascii_text(text):
+def ascii_text(text: Optional[str]) -> Optional[str]:
     """Transliterate the given text and make sure it ends up as ASCII."""
     text = latinize_text(text, ascii=True)
-    if is_text(text):
-        return text.encode('ascii', 'ignore').decode('ascii')
+    if text is None or not is_text(text):
+        return None
+    return text.encode('ascii', 'ignore').decode('ascii')
 
 
-def make_transliterator(script):
+def make_trans(script):
     try:
         from icu import Transliterator  # type: ignore
         inst = Transliterator.createInstance(script)

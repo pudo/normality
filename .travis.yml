@@ -11,8 +11,8 @@ before_install:
   - sudo apt-get install libicu-dev -y
 
 install:
-  - pip install --upgrade -q PyICU cchardet six twine nose coveralls
-  - pip install -e .
+  - pip install --upgrade -q PyICU cchardet coveralls
+  - pip install -e '.[dev]''
 
 script:
   - nosetests --with-coverage --cover-package=normality

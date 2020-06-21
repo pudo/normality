@@ -1,3 +1,4 @@
+from normality.util import Categories
 # https://en.wikipedia.org/wiki/Cyrillic_script_in_Unicode
 # Cyrillic: U+0400–U+04FF, 256 characters
 # Cyrillic Supplement: U+0500–U+052F, 48 characters
@@ -8,13 +9,13 @@
 # Combining Half Marks: U+FE2E–U+FE2F, 2 Cyrillic characters
 
 
-WS = ' '
+WS: str = ' '
 
 # Unicode character classes, see:
 # http://www.fileformat.info/info/unicode/category/index.htm
 # https://en.wikipedia.org/wiki/Unicode_character_property
 # http://www.unicode.org/charts/beta/script/
-UNICODE_CATEGORIES = {
+UNICODE_CATEGORIES: Categories = {
     'Cc': None,
     'Cf': None,
     'Cs': None,
@@ -39,7 +40,7 @@ UNICODE_CATEGORIES = {
     'So': None
 }
 
-CONTROL_CODES = {
+CONTROL_CODES: Categories = {
     'Cc': WS,
     'Cf': WS,
     'Cs': WS,

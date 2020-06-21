@@ -23,13 +23,13 @@ setup(
     author_email='friedrich@pudo.org',
     url='http://github.com/pudo/normality',
     license='MIT',
+    package_data={'banal': ['py.typed']},
     packages=find_packages(exclude=['ez_setup', 'examples', 'test']),
     namespace_packages=[],
     include_package_data=True,
-    zip_safe=True,
+    zip_safe=False,
     install_requires=[
-        'six >= 1.11.0',
-        'banal >= 0.4.1',
+        'banal >= 1.0.1',
         'text-unidecode',
         'chardet'
     ],
@@ -37,8 +37,12 @@ setup(
         'icu': [
             'pyicu >= 1.9.3',
         ],
+        'dev': [
+            'pyicu >= 1.9.3',
+            'mypy',
+            'twine',
+            'pytest'
+        ]
     },
     test_suite='test',
-    entry_points={
-    }
 )

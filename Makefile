@@ -2,7 +2,7 @@
 all: clean test dists
 
 install:
-	pip install -q --upgrade twine pytest
+	pip install -q '.[dev]'
 
 test: install
 	pytest

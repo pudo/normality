@@ -1,3 +1,12 @@
+"""Helper functions for string cleaning.
+
+`normality` includes functions to convert arbitrary Python objects to
+strings, transliterate them into the latin alphabet, make slugs for
+URLs, or perform the substitution of characters based on unicode
+character categories.
+"""
+from typing import Any, Optional
+
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
@@ -5,11 +14,14 @@ from normality.encoding import guess_encoding, guess_file_encoding  # noqa
 from normality.encoding import DEFAULT_ENCODING
 from normality.stringify import stringify  # noqa
 from normality.paths import safe_filename  # noqa
+from normality.util import Categories, Encoding
 
 
-def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
-              encoding_default=DEFAULT_ENCODING, encoding=None,
-              replace_categories=UNICODE_CATEGORIES):
+def normalize(text: Any, lowercase: bool = True, collapse: bool = True,
+              latinize: bool = False, ascii: bool = False,
+              encoding_default: Encoding = DEFAULT_ENCODING,
+              encoding: Optional[str] = None,
+              replace_categories: Categories = UNICODE_CATEGORIES):
     """The main normalization function for text.
 
     This will take a string and apply a set of transformations to it so
@@ -58,7 +70,7 @@ def normalize(text, lowercase=True, collapse=True, latinize=False, ascii=False,
     return text
 
 
-def slugify(text, sep='-'):
+def slugify(text: Any, sep: str = '-') -> Optional[str]:
     """A simple slug generator."""
     text = stringify(text)
     if text is None:
