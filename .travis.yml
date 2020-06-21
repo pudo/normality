@@ -12,9 +12,10 @@ before_install:
 
 install:
   - pip install --upgrade -q PyICU cchardet coveralls
-  - pip install -e '.[dev]''
+  - pip install -e '.[dev]'
 
 script:
+  - mypy normality
   - nosetests --with-coverage --cover-package=normality
 
 after_success:
