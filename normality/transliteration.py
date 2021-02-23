@@ -17,7 +17,7 @@ from normality.cleaning import compose_nfkc, is_text
 
 # Transform to latin, separate accents, decompose, remove
 # symbols, compose, push to ASCII
-ASCII_SCRIPT = 'Any-Latin; NFKD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFKC; Accents-Any; Latin-ASCII'  # noqa
+ASCII_SCRIPT = "Any-Latin; NFKD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFKC; Accents-Any; Latin-ASCII"  # noqa
 
 
 class ICUWarning(UnicodeWarning):
@@ -34,12 +34,12 @@ def latinize_text(text: Optional[str], ascii=False) -> Optional[str]:
         return text
 
     if ascii:
-        if not hasattr(latinize_text, '_ascii'):
+        if not hasattr(latinize_text, "_ascii"):
             latinize_text._ascii = make_trans(ASCII_SCRIPT)  # type: ignore
         return latinize_text._ascii(text)  # type: ignore
 
-    if not hasattr(latinize_text, '_tr'):
-        latinize_text._tr = make_trans('Any-Latin')  # type: ignore
+    if not hasattr(latinize_text, "_tr"):
+        latinize_text._tr = make_trans("Any-Latin")  # type: ignore
     return latinize_text._tr(text)  # type: ignore
 
 
@@ -48,17 +48,21 @@ def ascii_text(text: Optional[str]) -> Optional[str]:
     text = latinize_text(text, ascii=True)
     if text is None or not is_text(text):
         return None
-    return text.encode('ascii', 'ignore').decode('ascii')
+    return text.encode("ascii", "ignore").decode("ascii")
 
 
 def make_trans(script):
     try:
         from icu import Transliterator  # type: ignore
+
         inst = Transliterator.createInstance(script)
         return inst.transliterate
     except ImportError:
         from text_unidecode import unidecode  # type: ignore
-        warnings.warn("Install 'pyicu' for better text transliteration.", ICUWarning, stacklevel=4)  # noqa
+
+        warnings.warn(
+            "Install 'pyicu' for better text transliteration.", ICUWarning, stacklevel=4
+        )  # noqa
 
         def transliterate(text):
             text = compose_nfkc(text)

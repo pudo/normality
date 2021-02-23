@@ -7,8 +7,9 @@ from normality.encoding import guess_encoding
 from normality.encoding import DEFAULT_ENCODING
 
 
-def stringify(value: Any, encoding_default: str = DEFAULT_ENCODING,
-              encoding: Optional[str] = None) -> Optional[str]:
+def stringify(
+    value: Any, encoding_default: str = DEFAULT_ENCODING, encoding: Optional[str] = None
+) -> Optional[str]:
     """Brute-force convert a given object to a string.
 
     This will attempt an increasingly mean set of conversions to make a given
@@ -26,7 +27,7 @@ def stringify(value: Any, encoding_default: str = DEFAULT_ENCODING,
         elif isinstance(value, bytes):
             if encoding is None:
                 encoding = guess_encoding(value, default=encoding_default)
-            value = value.decode(encoding, 'replace')
+            value = value.decode(encoding, "replace")
             value = remove_unsafe_chars(value)
         else:
             value = str(value)

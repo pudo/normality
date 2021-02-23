@@ -21,7 +21,7 @@ def _safe_name(file_name, sep):
     return file_name.replace(WS, sep)
 
 
-def safe_filename(file_name, sep='_', default=None, extension=None):
+def safe_filename(file_name, sep="_", default=None, extension=None):
     """Create a secure filename for plain file system storage."""
     if file_name is None:
         return decode_path(default)
@@ -35,6 +35,6 @@ def safe_filename(file_name, sep='_', default=None, extension=None):
     file_name = file_name[:MAX_LENGTH]
     extension = _safe_name(extension or _extension, sep=sep)
     if extension is not None:
-        file_name = '.'.join((file_name, extension))
+        file_name = ".".join((file_name, extension))
         file_name = file_name[:MAX_LENGTH]
     return file_name
