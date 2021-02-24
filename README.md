@@ -1,6 +1,6 @@
 # normality
 
-[![Actions Status](https://github.com/alephdata/msglite/workflows/build/badge.svg)](https://github.com/alephdata/msglite/actions)
+[![build](https://github.com/pudo/normality/actions/workflows/build.yml/badge.svg)](https://github.com/pudo/normality/actions/workflows/build.yml)
 
 Normality is a Python micro-package that contains a small set of text
 normalization functions for easier re-use. These functions accept a
