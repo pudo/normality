@@ -33,7 +33,7 @@ setup(
         "icu": [
             "pyicu >= 1.9.3",
         ],
-        "dev": ["pyicu >= 1.9.3", "mypy", "twine", "pytest"],
+        "dev": ["pyicu >= 1.9.3", "mypy", "pytest"],
     },
     test_suite="test",
 )
