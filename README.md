@@ -1,6 +1,6 @@
 # normality
 
-[![Build Status](https://travis-ci.org/pudo/normality.svg?branch=master)](https://travis-ci.org/pudo/normality)
+[![Actions Status](https://github.com/alephdata/msglite/workflows/build/badge.svg)](https://github.com/alephdata/msglite/actions)
 
 Normality is a Python micro-package that contains a small set of text
 normalization functions for easier re-use. These functions accept a
