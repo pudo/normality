@@ -24,7 +24,7 @@ jobs:
         pip install -e ".[dev]"
     - name: Validate mypy typing
       run: |
-        mypy --strict .
+        mypy --strict normality
     - name: Run unit tests
       run: |
         pytest
