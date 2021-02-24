@@ -1,8 +1,6 @@
-import io
 import codecs
 import chardet
-from os import PathLike
-from typing import cast, BinaryIO, Union, TYPE_CHECKING
+from typing import BinaryIO, TYPE_CHECKING
 from normality.util import Encoding
 
 if TYPE_CHECKING:
@@ -77,13 +75,3 @@ def guess_file_encoding(fh: BinaryIO, default: Encoding = DEFAULT_ENCODING) -> E
 
     fh.seek(start)
     return normalize_result(detector.result, default=default)
-
-
-def guess_path_encoding(
-    file_path: Union[PathLike[str], PathLike[bytes], str, bytes],
-    default: Encoding = DEFAULT_ENCODING,
-) -> Encoding:
-    """Wrapper to open that damn file for you, lazy bastard."""
-    with io.open(file_path, "rb") as fh:
-        fhb = cast(BinaryIO, fh)
-        return guess_file_encoding(fhb, default=default)
