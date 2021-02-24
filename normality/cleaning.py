@@ -70,14 +70,14 @@ def remove_control_chars(text: Any) -> Optional[str]:
     return category_replace(text, replacements=CONTROL_CODES)
 
 
-def remove_unsafe_chars(text) -> Optional[str]:
+def remove_unsafe_chars(text: Any) -> Optional[str]:
     """Remove unsafe unicode characters from a piece of text."""
     if not is_text(text):
         return None
     return UNSAFE_RE.sub("", text)
 
 
-def remove_byte_order_mark(text) -> Optional[str]:
+def remove_byte_order_mark(text: Any) -> Optional[str]:
     """Remove a BOM from the beginning of the text."""
     if not is_text(text):
         return None

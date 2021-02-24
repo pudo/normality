@@ -1,8 +1,12 @@
 import io
 import codecs
-import chardet  # type: ignore
-from typing import cast, BinaryIO
+import chardet
+from os import PathLike
+from typing import cast, BinaryIO, Union, TYPE_CHECKING
 from normality.util import Encoding
+
+if TYPE_CHECKING:
+    from chardet import _IntermediateResultType
 
 DEFAULT_ENCODING = "utf-8"
 
@@ -31,15 +35,21 @@ def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> s
     return default
 
 
-def normalize_result(result, default: Encoding, threshold: float = 0.2) -> Encoding:
+def normalize_result(
+    result: "_IntermediateResultType", default: Encoding, threshold: float = 0.2
+) -> Encoding:
     """Interpret a chardet result."""
     if result is None:
         return default
-    if result.get("confidence") is None:
+    confidence = result.get("confidence")
+    if confidence is None:
         return default
-    if result.get("confidence") < threshold:
+    if float(confidence) < threshold:
         return default
-    return normalize_encoding(result.get("encoding"), default=default)
+    encoding = result.get("encoding")
+    if encoding is None:
+        return default
+    return normalize_encoding(encoding, default=default)
 
 
 def guess_encoding(text: bytes, default: Encoding = DEFAULT_ENCODING) -> Encoding:
@@ -69,7 +79,10 @@ def guess_file_encoding(fh: BinaryIO, default: Encoding = DEFAULT_ENCODING) -> E
     return normalize_result(detector.result, default=default)
 
 
-def guess_path_encoding(file_path, default: Encoding = DEFAULT_ENCODING) -> Encoding:
+def guess_path_encoding(
+    file_path: Union[PathLike[str], PathLike[bytes], str, bytes],
+    default: Encoding = DEFAULT_ENCODING,
+) -> Encoding:
     """Wrapper to open that damn file for you, lazy bastard."""
     with io.open(file_path, "rb") as fh:
         fhb = cast(BinaryIO, fh)

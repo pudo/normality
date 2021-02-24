@@ -7,6 +7,14 @@ from normality.encoding import guess_encoding
 from normality.encoding import DEFAULT_ENCODING
 
 
+def _clean_empty(value: str) -> Optional[str]:
+    # XXX: is this really a good idea?
+    value = value.strip()
+    if not len(value):
+        return None
+    return value
+
+
 def stringify(
     value: Any, encoding_default: str = DEFAULT_ENCODING, encoding: Optional[str] = None
 ) -> Optional[str]:
@@ -18,22 +26,18 @@ def stringify(
     """
     if value is None:
         return None
-
-    if not isinstance(value, str):
-        if isinstance(value, (date, datetime)):
-            return value.isoformat()
-        elif isinstance(value, (float, Decimal)):
-            return Decimal(value).to_eng_string()
-        elif isinstance(value, bytes):
-            if encoding is None:
-                encoding = guess_encoding(value, default=encoding_default)
-            value = value.decode(encoding, "replace")
-            value = remove_unsafe_chars(value)
-        else:
-            value = str(value)
-
-    # XXX: is this really a good idea?
-    value = value.strip()
-    if not len(value):
-        return None
-    return value
+    if isinstance(value, str):
+        return _clean_empty(value)
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    elif isinstance(value, (float, Decimal)):
+        return Decimal(value).to_eng_string()
+    elif isinstance(value, bytes):
+        if encoding is None:
+            encoding = guess_encoding(value, default=encoding_default)
+        value = value.decode(encoding, "replace")
+        value = remove_unsafe_chars(value)
+        if value is None:
+            return None
+        return _clean_empty(value)
+    return _clean_empty(str(value))

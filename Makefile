@@ -1,20 +1,15 @@
 
-all: clean test dists
+all: clean test
 
 install:
 	pip install -q '.[dev]'
 
 test: install
 	pytest
-
-dists: clean
-	python setup.py sdist bdist_wheel
-
-release: dists
-	twine upload dist/*
+	mypy --strict normality
 
 clean:
-	rm -rf dist build .eggs
+	rm -rf dist build .eggs .mypy_cache .pytest_cache
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 	find . -name '*.pyc' -exec rm -f {} +

@@ -10,15 +10,30 @@ from typing import Any, Optional
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
-from normality.encoding import guess_encoding, guess_file_encoding  # noqa
+from normality.encoding import guess_encoding, guess_file_encoding
 from normality.encoding import DEFAULT_ENCODING
 from normality.stringify import stringify
 from normality.paths import safe_filename
 from normality.util import Categories, Encoding
 
+__all__ = [
+    "collapse_spaces",
+    "category_replace",
+    "safe_filename",
+    "normalize",
+    "stringify",
+    "slugify",
+    "guess_encoding",
+    "guess_file_encoding",
+    "latinize_text",
+    "ascii_text",
+    "WS",
+    "UNICODE_CATEGORIES",
+]
+
 
 def normalize(
-    text: Any,
+    value: Any,
     lowercase: bool = True,
     collapse: bool = True,
     latinize: bool = False,
@@ -26,7 +41,7 @@ def normalize(
     encoding_default: Encoding = DEFAULT_ENCODING,
     encoding: Optional[str] = None,
     replace_categories: Categories = UNICODE_CATEGORIES,
-):
+) -> Optional[str]:
     """The main normalization function for text.
 
     This will take a string and apply a set of transformations to it so
@@ -43,9 +58,9 @@ def normalize(
       given character. It is used to replace any non-text elements of the
       input string.
     """
-    text = stringify(text, encoding_default=encoding_default, encoding=encoding)
+    text = stringify(value, encoding_default=encoding_default, encoding=encoding)
     if text is None:
-        return
+        return None
 
     if lowercase:
         # Yeah I made a Python package for this.
@@ -61,7 +76,7 @@ def normalize(
         text = latinize_text(text)
 
     if text is None:
-        return
+        return None
 
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
@@ -74,9 +89,9 @@ def normalize(
     return text
 
 
-def slugify(text: Any, sep: str = "-") -> Optional[str]:
+def slugify(value: Any, sep: str = "-") -> Optional[str]:
     """A simple slug generator."""
-    text = stringify(text)
+    text = stringify(value)
     if text is None:
         return None
     text = text.replace(sep, WS)
