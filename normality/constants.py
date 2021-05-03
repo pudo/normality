@@ -36,9 +36,10 @@ UNICODE_CATEGORIES: Categories = {
     "Pi": WS,
     "Pf": WS,
     "Po": WS,
+    "Sm": WS,
     "Sc": None,
     "Sk": None,
-    "So": None,
+    "So": WS,
 }
 
 CONTROL_CODES: Categories = {"Cc": WS, "Cf": WS, "Cs": WS, "Co": WS, "Cn": WS}

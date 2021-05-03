@@ -66,6 +66,11 @@ def normalize(
         # Yeah I made a Python package for this.
         text = text.lower()
 
+    # Perform unicode category-based character replacement. This is
+    # used to filter out whole classes of characters, such as symbols,
+    # punctuation, or whitespace-like characters.
+    text = category_replace(text, replace_categories)
+
     if ascii:
         # A stricter form of transliteration that leaves only ASCII
         # characters.
@@ -77,11 +82,6 @@ def normalize(
 
     if text is None:
         return None
-
-    # Perform unicode category-based character replacement. This is
-    # used to filter out whole classes of characters, such as symbols,
-    # punctuation, or whitespace-like characters.
-    text = category_replace(text, replace_categories)
 
     if collapse:
         # Remove consecutive whitespace.
