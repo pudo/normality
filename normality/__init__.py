@@ -14,6 +14,7 @@ from normality.encoding import guess_encoding, guess_file_encoding
 from normality.encoding import DEFAULT_ENCODING
 from normality.stringify import stringify
 from normality.paths import safe_filename
+from normality.slugify import slugify
 from normality.util import Categories, Encoding
 
 __all__ = [
@@ -78,24 +79,10 @@ def normalize(
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
     # punctuation, or whitespace-like characters.
-    text = category_replace(text, replace_categories)
-
-    if text is None:
-        return None
+    if replace_categories is not None:
+        text = category_replace(text, replace_categories)
 
     if collapse:
         # Remove consecutive whitespace.
         text = collapse_spaces(text)
     return text
-
-
-def slugify(value: Any, sep: str = "-") -> Optional[str]:
-    """A simple slug generator."""
-    text = stringify(value)
-    if text is None:
-        return None
-    text = text.replace(sep, WS)
-    text = normalize(text, ascii=True)
-    if text is None:
-        return None
-    return text.replace(WS, sep)

@@ -30,7 +30,7 @@ UNICODE_CATEGORIES: Categories = {
     "Zs": WS,
     "Zl": WS,
     "Zp": WS,
-    "Pc": None,
+    "Pc": WS,  # TODO: figure out if this wants to be None
     "Pd": WS,
     "Ps": WS,
     "Pe": WS,
@@ -45,5 +45,36 @@ UNICODE_CATEGORIES: Categories = {
     "Zl": WS,
     "Zp": WS,
 }
+
+SLUG_CATEGORIES: Categories = {
+    "Cc": None,
+    "Cf": None,
+    "Cs": None,
+    "Co": None,
+    "Cn": None,
+    # "Lm": None,
+    # "Mn": None,
+    "Mc": WS,
+    "Me": None,
+    "No": None,
+    "Zs": WS,
+    "Zl": WS,
+    "Zp": WS,
+    "Pc": WS,
+    "Pd": WS,
+    "Ps": WS,
+    "Pe": WS,
+    "Pi": WS,
+    "Pf": WS,
+    "Po": WS,
+    "Sm": WS,
+    "Sc": None,
+    "Sk": None,
+    "So": WS,
+    "Zs": WS,
+    "Zl": WS,
+    "Zp": WS,
+}
+
 
 CONTROL_CODES: Categories = {"Cc": WS, "Cf": WS, "Cs": WS, "Co": WS, "Cn": WS}

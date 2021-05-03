@@ -32,6 +32,8 @@ class NormalityTest(unittest.TestCase):
     def test_slugify(self):
         text = u"BABY! camel-is good"
         self.assertEqual("baby-camel-is-good", slugify(text, sep="-"))
+        self.assertEqual("tests", slugify("testʼs", sep="-"))
+        self.assertEqual("test-s", slugify("test_s", sep="-"))
 
     def test_georgian(self):
         text = u"ავლაბრის ფონდი"
@@ -40,6 +42,7 @@ class NormalityTest(unittest.TestCase):
     def test_german(self):
         text = u"Häschen Spaß"
         self.assertEqual("Haschen Spass", ascii_text(text))
+        self.assertEqual("haschen-spass", slugify(text, sep="-"))
 
     def test_stringify(self):
         self.assertEqual(".", stringify(" . "))
