@@ -21,6 +21,8 @@ def slugify(value: Any, sep: str = "-") -> Optional[str]:
     # characters.
     text = category_replace(text, SLUG_CATEGORIES)
     text = latinize_text(text, ascii=True)
+    if text is None:
+        return None
     text = text.lower()
     text = "".join([c for c in text if c in VALID_CHARS])
     text = collapse_spaces(text)
