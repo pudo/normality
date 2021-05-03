@@ -26,10 +26,11 @@ UNICODE_CATEGORIES: Categories = {
     "Mn": None,
     "Mc": WS,
     "Me": None,
+    "No": None,
     "Zs": WS,
     "Zl": WS,
     "Zp": WS,
-    "Pc": WS,
+    "Pc": None,
     "Pd": WS,
     "Ps": WS,
     "Pe": WS,
@@ -40,6 +41,9 @@ UNICODE_CATEGORIES: Categories = {
     "Sc": None,
     "Sk": None,
     "So": WS,
+    "Zs": WS,
+    "Zl": WS,
+    "Zp": WS,
 }
 
 CONTROL_CODES: Categories = {"Cc": WS, "Cf": WS, "Cs": WS, "Co": WS, "Cn": WS}
