@@ -34,6 +34,10 @@ class NormalityTest(unittest.TestCase):
         self.assertEqual("baby-camel-is-good", slugify(text, sep="-"))
         self.assertEqual("tests", slugify("testʼs", sep="-"))
         self.assertEqual("test-s", slugify("test_s", sep="-"))
+        self.assertEqual(None, slugify("-", sep="-"))
+        self.assertEqual(None, slugify("", sep="-"))
+        self.assertEqual(None, slugify("- -", sep="-"))
+        self.assertEqual(None, slugify(None, sep="-"))
 
     def test_georgian(self):
         text = u"ავლაბრის ფონდი"

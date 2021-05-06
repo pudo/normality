@@ -26,6 +26,6 @@ def slugify(value: Any, sep: str = "-") -> Optional[str]:
     text = text.lower()
     text = "".join([c for c in text if c in VALID_CHARS])
     text = collapse_spaces(text)
-    if text is None:
+    if text is None or len(text) == 0:
         return None
     return text.replace(WS, sep)
