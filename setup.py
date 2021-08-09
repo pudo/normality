@@ -33,7 +33,12 @@ setup(
         "icu": [
             "pyicu >= 1.9.3",
         ],
-        "dev": ["pyicu >= 1.9.3", "mypy", "pytest"],
+        "dev": [
+            "pyicu >= 1.9.3",
+            "mypy",
+            "pytest",
+            "types-chardet",
+        ],
     },
     test_suite="test",
 )
