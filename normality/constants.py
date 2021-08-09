@@ -17,7 +17,7 @@ WS: str = " "
 # https://en.wikipedia.org/wiki/Unicode_character_property
 # http://www.unicode.org/charts/beta/script/
 UNICODE_CATEGORIES: Categories = {
-    "Cc": None,
+    "Cc": WS,
     "Cf": None,
     "Cs": None,
     "Co": None,
