@@ -18,7 +18,9 @@ from normality.util import is_text
 
 # Transform to latin, separate accents, decompose, remove
 # symbols, compose, push to ASCII
-ASCII_SCRIPT = "Any-Latin; NFKD; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; NFKC; Accents-Any; Latin-ASCII"  # noqa
+ASCII_SCRIPT = "Any-Latin; NFKD; [:Nonspacing Mark:] Remove; Accents-Any; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; Latin-ASCII"  # noqa
+# nb. 2021-11-05 Accents-Any is now followed with another nonspacing mark remover.
+# This script is becoming a bit silly, there has to be a nicer way to do this?
 
 
 class ICUWarning(UnicodeWarning):
@@ -47,9 +49,10 @@ def latinize_text(text: Optional[str], ascii: bool = False) -> Optional[str]:
 def ascii_text(text: Optional[str]) -> Optional[str]:
     """Transliterate the given text and make sure it ends up as ASCII."""
     text = latinize_text(text, ascii=True)
+    print("XXX", text)
     if text is None or not is_text(text):
         return None
-    return text.encode("ascii", "ignore").decode("ascii")
+    return text.encode("ascii", "replace").decode("ascii")
 
 
 def make_trans(script: str) -> Callable[[str], Optional[str]]:
