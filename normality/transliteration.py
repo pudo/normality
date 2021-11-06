@@ -49,7 +49,6 @@ def latinize_text(text: Optional[str], ascii: bool = False) -> Optional[str]:
 def ascii_text(text: Optional[str]) -> Optional[str]:
     """Transliterate the given text and make sure it ends up as ASCII."""
     text = latinize_text(text, ascii=True)
-    print("XXX", text)
     if text is None or not is_text(text):
         return None
     return text.encode("ascii", "replace").decode("ascii")
