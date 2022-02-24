@@ -1,10 +1,10 @@
 import codecs
-import chardet
+from charset_normalizer import from_bytes, CharsetMatches
 from typing import BinaryIO, TYPE_CHECKING
 from normality.util import Encoding
 
 if TYPE_CHECKING:
-    from chardet import _IntermediateResultType
+    from charset_normalizer import CharsetMatches
 
 DEFAULT_ENCODING = "utf-8"
 
@@ -28,25 +28,23 @@ def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> s
     if _is_encoding_codec(encoding):
         return encoding
     encoding = encoding.replace("-", "")
+    encoding = encoding.replace("_", "")
     if _is_encoding_codec(encoding):
         return encoding
     return default
 
 
 def normalize_result(
-    result: "_IntermediateResultType", default: Encoding, threshold: float = 0.2
+    result: CharsetMatches, default: Encoding, threshold: float = 0.2
 ) -> Encoding:
     """Interpret a chardet result."""
-    if result is None:
+    res = result.best()
+    if res is None:
         return default
-    confidence = result.get("confidence")
-    if confidence is None:
-        return default
-    if float(confidence) < threshold:
-        return default
-    encoding = result.get("encoding")
+    encoding = res.encoding
     if encoding is None:
         return default
+
     return normalize_encoding(encoding, default=default)
 
 
@@ -56,22 +54,24 @@ def guess_encoding(text: bytes, default: Encoding = DEFAULT_ENCODING) -> Encodin
     Given a piece of text, apply character encoding detection to
     guess the appropriate encoding of the text.
     """
-    result = chardet.detect(text)
+    result = from_bytes(text, explain=False)
+
     return normalize_result(result, default=default)
 
 
 def guess_file_encoding(fh: BinaryIO, default: Encoding = DEFAULT_ENCODING) -> Encoding:
     """Guess encoding from a file handle."""
     start = fh.tell()
-    detector = chardet.UniversalDetector()
+    result: CharsetMatches = CharsetMatches()
+
     while True:
         data = fh.read(1024 * 10)
         if not data:
-            detector.close()
             break
-        detector.feed(data)
-        if detector.done:
+
+        result = from_bytes(data, explain=False)
+        if result:
             break
 
     fh.seek(start)
-    return normalize_result(detector.result, default=default)
+    return normalize_result(result, default=default)

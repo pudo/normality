@@ -62,12 +62,12 @@ class NormalityTest(unittest.TestCase):
         text = u"Порошенко Петро Олексійович"
         encoded = text.encode("iso-8859-5")
         out = guess_encoding(encoded)
-        self.assertEqual("iso-8859-5", out)
+        self.assertEqual("iso8859_5", out)
 
     def test_guess_file_encoding(self):
         with open("tests/fixtures/utf-16.txt", "rb") as fh:
             out = guess_file_encoding(fh)
-            self.assertEqual("utf-16", out)
+            self.assertEqual("utf_16", out)
 
     def test_petro_iso_encoded(self):
         text = u"Порошенко Петро Олексійович"
