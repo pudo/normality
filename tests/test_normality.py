@@ -2,7 +2,14 @@ import unittest
 from datetime import datetime
 
 from normality import normalize, latinize_text, ascii_text
-from normality import stringify, slugify, guess_encoding, guess_file_encoding
+from normality import (
+    stringify,
+    slugify,
+    guess_encoding,
+    guess_file_encoding,
+    predict_file_encoding,
+    predict_encoding,
+)
 
 
 class NormalityTest(unittest.TestCase):
@@ -62,11 +69,22 @@ class NormalityTest(unittest.TestCase):
         text = u"Порошенко Петро Олексійович"
         encoded = text.encode("iso-8859-5")
         out = guess_encoding(encoded)
+        self.assertEqual("iso-8859-5", out)
+
+    def test_predict_encoding(self):
+        text = u"Порошенко Петро Олексійович"
+        encoded = text.encode("iso-8859-5")
+        out = predict_encoding(encoded)
         self.assertEqual("iso8859_5", out)
 
     def test_guess_file_encoding(self):
         with open("tests/fixtures/utf-16.txt", "rb") as fh:
             out = guess_file_encoding(fh)
+            self.assertEqual("utf-16", out)
+
+    def test_predict_file_encoding(self):
+        with open("tests/fixtures/utf-16.txt", "rb") as fh:
+            out = predict_file_encoding(fh)
             self.assertEqual("utf_16", out)
 
     def test_petro_iso_encoded(self):
