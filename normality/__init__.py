@@ -11,6 +11,7 @@ from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding, guess_file_encoding
+from normality.encoding import predict_encoding, predict_file_encoding
 from normality.encoding import DEFAULT_ENCODING
 from normality.stringify import stringify
 from normality.paths import safe_filename
@@ -26,6 +27,8 @@ __all__ = [
     "slugify",
     "guess_encoding",
     "guess_file_encoding",
+    "predict_encoding",
+    "predict_file_encoding",
     "latinize_text",
     "ascii_text",
     "WS",
