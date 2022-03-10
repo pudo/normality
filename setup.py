@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="normality",
-    version="2.2.5",
+    version="2.3.0",
     description="Micro-library to normalize text strings",
     long_description=long_description,
     long_description_content_type="text/markdown",
