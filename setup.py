@@ -28,7 +28,12 @@ setup(
     namespace_packages=[],
     include_package_data=True,
     zip_safe=False,
-    install_requires=["banal >= 1.0.1", "text-unidecode", "chardet"],
+    install_requires=[
+        "banal >= 1.0.1",
+        "text-unidecode",
+        "chardet",
+        "charset-normalizer >= 2.0.0",
+    ],
     extras_require={
         "icu": [
             "pyicu >= 1.9.3",
