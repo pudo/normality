@@ -21,8 +21,7 @@ def _is_encoding_codec(encoding: Encoding) -> bool:
         return False
 
 
-def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
-    """Normalize the encoding name, replace ASCII w/ UTF-8."""
+def _tidy_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     if encoding is None:
         return default
     encoding = encoding.lower().strip()
@@ -37,9 +36,18 @@ def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> s
     return default
 
 
+def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
+    """Normalize the encoding name, replace ASCII w/ UTF-8."""
+    warnings.warn(
+        "normalize_encoding is now deprecated. Use tidy_encoding instead",
+        DeprecationWarning,
+    )
+    return _tidy_encoding(encoding, default)
+
+
 def tidy_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
-    return normalize_encoding(encoding, default)
+    return _tidy_encoding(encoding, default)
 
 
 def normalize_result(
