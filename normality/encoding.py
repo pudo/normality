@@ -38,6 +38,10 @@ def _tidy_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
 
 def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
+    warnings.warn(
+        "normalize_encoding is now deprecated. Use tidy_encoding instead",
+        DeprecationWarning,
+    )
     return _tidy_encoding(encoding, default)
 
 
