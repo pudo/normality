@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Any, Optional
 
 from normality.cleaning import remove_unsafe_chars
-from normality.encoding import guess_encoding
+from normality.encoding import predict_encoding
 from normality.encoding import DEFAULT_ENCODING
 
 
@@ -34,7 +34,7 @@ def stringify(
         return Decimal(value).to_eng_string()
     elif isinstance(value, bytes):
         if encoding is None:
-            encoding = guess_encoding(value, default=encoding_default)
+            encoding = predict_encoding(value, default=encoding_default)
         value = value.decode(encoding, "replace")
         value = remove_unsafe_chars(value)
         if value is None:

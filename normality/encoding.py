@@ -23,10 +23,6 @@ def _is_encoding_codec(encoding: Encoding) -> bool:
 
 def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
-    warnings.warn(
-        "normalize_encoding is now deprecated. Use tidy_encoding instead",
-        DeprecationWarning,
-    )
     if encoding is None:
         return default
     encoding = encoding.lower().strip()
@@ -100,7 +96,6 @@ def predict_encoding(text: bytes, default: Encoding = DEFAULT_ENCODING) -> Encod
     guess the appropriate encoding of the text.
     """
     result = from_bytes(text, explain=False)
-
     return tidy_result(result, default=default)
 
 
