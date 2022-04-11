@@ -12,6 +12,7 @@ if it is installed.
 """
 import warnings
 from typing import cast, Optional, Callable
+from functools import lru_cache
 
 from normality.cleaning import compose_nfkc
 from normality.util import is_text
@@ -27,6 +28,7 @@ class ICUWarning(UnicodeWarning):
     pass
 
 
+@lru_cache(maxsize=2**16)
 def latinize_text(text: Optional[str], ascii: bool = False) -> Optional[str]:
     """Transliterate the given text to the latin script.
 
