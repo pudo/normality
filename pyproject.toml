@@ -22,7 +22,7 @@ urls = {Homepage = "http://github.com/pudo/normality"}
 dependencies = [
     "banal >= 1.0.1",
     "text-unidecode",
-    "chardet",
+    "chardet >= 5.0.0",
     "charset-normalizer >= 2.0.0",
 ]
 dynamic = ["version"]
