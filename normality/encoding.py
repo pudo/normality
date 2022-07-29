@@ -2,11 +2,10 @@ import codecs
 import chardet
 import warnings
 from charset_normalizer import from_bytes, CharsetMatches
-from typing import BinaryIO, TYPE_CHECKING
+from typing import Any, BinaryIO, TYPE_CHECKING
 from normality.util import Encoding
 
 if TYPE_CHECKING:
-    from chardet import _IntermediateResultType
     from charset_normalizer import CharsetMatches
 
 DEFAULT_ENCODING = "utf-8"
@@ -47,7 +46,7 @@ def tidy_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
 
 
 def normalize_result(
-    result: "_IntermediateResultType", default: Encoding, threshold: float = 0.2
+    result: Any, default: Encoding, threshold: float = 0.2
 ) -> Encoding:
     """Interpret a chardet result."""
     warnings.warn(
@@ -89,8 +88,7 @@ def guess_encoding(text: bytes, default: Encoding = DEFAULT_ENCODING) -> Encodin
         "guess_encoding is now deprecated. Use predict_encoding instead",
         DeprecationWarning,
     )
-    result = chardet.detect(text)
-    return normalize_result(result, default=default)
+    return predict_encoding(text, default=default)
 
 
 def predict_encoding(text: bytes, default: Encoding = DEFAULT_ENCODING) -> Encoding:
