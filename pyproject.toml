@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.2.0", "wheel", "setuptools_scm[toml]>=3.4.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "normality"
+authors = [{name = "Friedrich Lindenberg", email = "friedrich@pudo.org"}]
+license = {text = "MIT"}
+description = "Micro-library to normalize text strings"
+readme = "README.md"
+keywords = ["text", "unicode", "normalization", "slugs"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+]
+urls = {Homepage = "http://github.com/pudo/normality"}
+dependencies = [
+    "banal >= 1.0.1",
+    "text-unidecode",
+    "chardet",
+    "charset-normalizer >= 2.0.0",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+icu = ["pyicu >= 1.9.3"]
+dev = [
+    "pyicu >= 1.9.3",
+    "mypy",
+    "pytest",
+    "types-chardet",
+]
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = ["ez_setup", "examples", "tests"]
+namespaces = false
+
+[tool.setuptools.package-data]
+banal = ["py.typed"]
+
+[tool.setuptools_scm]
+
+[tool.distutils.bdist_wheel]
+universal = 1
