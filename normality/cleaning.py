@@ -7,7 +7,7 @@ from normality.util import Categories, is_text
 
 COLLAPSE_RE = re.compile(r"\s+", re.U)
 BOM_RE = re.compile("^\ufeff", re.U)
-UNSAFE_RE = re.compile(r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f]")
+UNSAFE_RE = re.compile(r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f]|\u2028")
 QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
 
 
@@ -62,7 +62,7 @@ def category_replace(
         replacement = replacements.get(cat, character)
         if replacement is not None:
             characters.append(replacement)
-    return u"".join(characters)
+    return "".join(characters)
 
 
 def remove_control_chars(text: Any) -> Optional[str]:

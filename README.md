@@ -1,4 +1,4 @@
-# normality
+# normality text cleanup
 
 [![build](https://github.com/pudo/normality/actions/workflows/build.yml/badge.svg)](https://github.com/pudo/normality/actions/workflows/build.yml)
 

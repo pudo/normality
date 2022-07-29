@@ -77,4 +77,4 @@ SLUG_CATEGORIES: Categories = {
 }
 
 
-CONTROL_CODES: Categories = {"Cc": WS, "Cf": WS, "Cs": WS, "Co": WS, "Cn": WS}
+CONTROL_CODES: Categories = {"Cc": WS, "Cf": WS, "Cs": WS, "Co": WS, "Cn": WS, "Zl": WS}
