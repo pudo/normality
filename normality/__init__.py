@@ -18,6 +18,7 @@ from normality.paths import safe_filename
 from normality.slugify import slugify
 from normality.util import Categories, Encoding
 
+__version__ = "2.3.3"
 __all__ = [
     "collapse_spaces",
     "category_replace",
