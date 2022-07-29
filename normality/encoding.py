@@ -11,15 +11,6 @@ if TYPE_CHECKING:
 DEFAULT_ENCODING = "utf-8"
 
 
-def _is_encoding_codec(encoding: Encoding) -> bool:
-    """Check if a given string is a valid encoding name."""
-    try:
-        codecs.lookup(encoding)
-        return True
-    except LookupError:
-        return False
-
-
 def normalize_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
     warnings.warn(
@@ -33,16 +24,14 @@ def tidy_encoding(encoding: str, default: Encoding = DEFAULT_ENCODING) -> str:
     """Normalize the encoding name, replace ASCII w/ UTF-8."""
     if encoding is None:
         return default
-    encoding = encoding.lower().strip()
-    if encoding in ["", "ascii"]:
+    encoding = encoding.strip()
+    if encoding.lower() in ["", "ascii"]:
         return default
-    if _is_encoding_codec(encoding):
-        return encoding
-    encoding = encoding.replace("-", "")
-    encoding = encoding.replace("_", "")
-    if _is_encoding_codec(encoding):
-        return encoding
-    return default
+    try:
+        codec = codecs.lookup(encoding)
+        return codec.name
+    except LookupError:
+        return default
 
 
 def normalize_result(
