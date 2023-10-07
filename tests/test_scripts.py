@@ -14,4 +14,5 @@ def test_is_modern_alphabet():
     assert not is_modern_alphabet(" 习近平")
     assert is_modern_alphabet("Xí Jìnpíng")
     assert is_modern_alphabet("Ротенберг Аркадий")
+    assert is_modern_alphabet(".,[]{}()!@#$%^&*()_+)«»‘“")
     assert not is_modern_alphabet("တပ်မတော်(ကြည်")
