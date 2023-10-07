@@ -17,7 +17,7 @@ FUNKY = 100000
 UNKNOWN = 0
 
 # Source: https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt
-UNICODE_BLOCKS: Tuple[Tuple[int, int, str, Tuple[int]]] = (
+UNICODE_BLOCKS: Tuple[Tuple[int, int, str, Tuple[int, ...]]] = (  # type: ignore
     (
         0x0000,
         0x007F,
@@ -662,13 +662,13 @@ BLOCK_TAGS = [(s, e, t) for s, e, _, t in UNICODE_BLOCKS if len(t)]
 
 
 @lru_cache(maxsize=5000)
-def char_tags(char: str) -> Tuple[int]:
+def char_tags(char: str) -> Tuple[int, ...]:
     """Get the tags applicable to a particular character."""
     codepoint = ord(char)
     for start, end, tags in BLOCK_TAGS:
         if start <= codepoint <= end:
             return tags
-    return ()  # type: ignore
+    return ()
 
 
 def is_modern_alphabet(word: str) -> bool:
@@ -681,6 +681,19 @@ def is_modern_alphabet(word: str) -> bool:
         if not len(tags):
             continue
         if ALPHABET not in tags:
+            return False
+        if HISTORIC in tags or FUNKY in tags:
+            return False
+    return True
+
+
+def is_latin(word: str) -> bool:
+    """Check if a word is written in the latin alphabet."""
+    for char in word:
+        tags = char_tags(char)
+        if not len(tags):
+            continue
+        if LATIN not in tags:
             return False
         if HISTORIC in tags or FUNKY in tags:
             return False
