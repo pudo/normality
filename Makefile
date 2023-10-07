@@ -4,8 +4,12 @@ all: clean test
 install:
 	pip install -q '.[dev]'
 
-test: install
+check: test typecheck
+
+test:
 	pytest
+
+typecheck:
 	mypy --strict normality
 
 clean:

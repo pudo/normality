@@ -24,10 +24,10 @@ jobs:
         pip install -e ".[dev]"
     - name: Validate mypy typing
       run: |
-        mypy --strict normality
+        make typecheck
     - name: Run unit tests
       run: |
-        pytest
+        make test
     - name: Build a distribution
       run: |
         python -m build -nwsx
