@@ -41,9 +41,6 @@ UNICODE_CATEGORIES: Categories = {
     "Sc": None,
     "Sk": None,
     "So": WS,
-    "Zs": WS,
-    "Zl": WS,
-    "Zp": WS,
 }
 
 SLUG_CATEGORIES: Categories = {
@@ -71,9 +68,6 @@ SLUG_CATEGORIES: Categories = {
     "Sc": None,
     "Sk": None,
     "So": WS,
-    "Zs": WS,
-    "Zl": WS,
-    "Zp": WS,
 }
 
 
