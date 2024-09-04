@@ -30,7 +30,9 @@ def stringify(
         return _clean_empty(value)
     if isinstance(value, (date, datetime)):
         return value.isoformat()
-    elif isinstance(value, (float, Decimal)):
+    elif isinstance(value, float):
+        return str(value)
+    elif isinstance(value, Decimal):
         return Decimal(value).to_eng_string()
     elif isinstance(value, bytes):
         if encoding is None:
