@@ -5,9 +5,11 @@ from typing import Any, Optional
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 from normality.util import Categories, is_text
 
-COLLAPSE_RE = re.compile(r"\s+", re.U)
+COLLAPSE_RE = re.compile(r"[\s\u2028\u2029\u200b\u200c\u200d]+", re.U)
 BOM_RE = re.compile("^\ufeff", re.U)
-UNSAFE_RE = re.compile(r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f]|\u2028")
+UNSAFE_RE = re.compile(
+    r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f\u2028\u2029\u200b\u200c\u200d]"
+)
 QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
 
 
