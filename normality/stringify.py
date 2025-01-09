@@ -31,7 +31,8 @@ def stringify(
     if isinstance(value, (date, datetime)):
         return value.isoformat()
     elif isinstance(value, float):
-        return str(value)
+        # Avoid trailing zeros and limit to 3 decimal places:
+        return format(value, ".3f").rstrip("0").rstrip(".")
     elif isinstance(value, Decimal):
         return Decimal(value).to_eng_string()
     elif isinstance(value, bytes):
