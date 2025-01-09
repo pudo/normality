@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime
+from datetime import datetime, UTC
 
 from normality import normalize, latinize_text, ascii_text
 from normality import (
@@ -22,22 +22,22 @@ class NormalityTest(unittest.TestCase):
         self.assertEqual(None, normalize(" "))
 
     def test_petro(self):
-        text = u"Порошенко Петро Олексійович"
+        text = "Порошенко Петро Олексійович"
         self.assertEqual("porosenko-petro-oleksijovic", slugify(text))
         self.assertEqual("Porosenko Petro Oleksijovic", ascii_text(text))
-        self.assertEqual(u"Porošenko Petro Oleksíjovič", latinize_text(text))
-        self.assertEqual(u"порошенко петро олексіиович", normalize(text))
+        self.assertEqual("Porošenko Petro Oleksíjovič", latinize_text(text))
+        self.assertEqual("порошенко петро олексіиович", normalize(text))
 
     def test_ahmad(self):
-        text = u"əhməd"
+        text = "əhməd"
         self.assertEqual("ahmad", ascii_text(text))
 
     def test_azeri(self):
-        text = u"FUAD ALIYEV ƏHMƏD OĞLU"
+        text = "FUAD ALIYEV ƏHMƏD OĞLU"
         self.assertEqual("FUAD ALIYEV AHMAD OGLU", ascii_text(text))
 
     def test_slugify(self):
-        text = u"BABY! camel-is good"
+        text = "BABY! camel-is good"
         self.assertEqual("baby-camel-is-good", slugify(text, sep="-"))
         self.assertEqual("tests", slugify("testʼs", sep="-"))
         self.assertEqual("test-s", slugify("test_s", sep="-"))
@@ -47,11 +47,11 @@ class NormalityTest(unittest.TestCase):
         self.assertEqual(None, slugify(None, sep="-"))
 
     def test_georgian(self):
-        text = u"ავლაბრის ფონდი"
+        text = "ავლაბრის ფონდი"
         self.assertEqual("avlabris pondi", ascii_text(text))
 
     def test_german(self):
-        text = u"Häschen Spaß"
+        text = "Häschen Spaß"
         self.assertEqual("Haschen Spass", ascii_text(text))
         self.assertEqual("haschen-spass", slugify(text, sep="-"))
 
@@ -61,18 +61,18 @@ class NormalityTest(unittest.TestCase):
         self.assertEqual("0.5", stringify(0.5))
 
     def test_stringify_datetime(self):
-        dt = datetime.utcnow()
+        dt = datetime.now(UTC)
         text = stringify(dt)
         self.assertTrue(text.startswith("%s-" % dt.year), text)
 
     def test_guess_encoding(self):
-        text = u"Порошенко Петро Олексійович"
+        text = "Порошенко Петро Олексійович"
         encoded = text.encode("iso-8859-5")
         out = guess_encoding(encoded)
         self.assertEqual("iso8859-5", out)
 
     def test_predict_encoding(self):
-        text = u"Порошенко Петро Олексійович"
+        text = "Порошенко Петро Олексійович"
         encoded = text.encode("iso-8859-5")
         out = predict_encoding(encoded)
         self.assertEqual("iso8859-5", out)
@@ -88,13 +88,13 @@ class NormalityTest(unittest.TestCase):
             self.assertEqual("utf-16", out)
 
     def test_petro_iso_encoded(self):
-        text = u"Порошенко Петро Олексійович"
+        text = "Порошенко Петро Олексійович"
         encoded = text.encode("iso8859-5")
         out = stringify(encoded)
         self.assertEqual(text, out)
 
     def test_petro_utf16_encoded(self):
-        text = u"Порошенко Петро Олексійович"
+        text = "Порошенко Петро Олексійович"
         encoded = text.encode("utf-16")
         out = stringify(encoded)
         self.assertEqual(text, out)
