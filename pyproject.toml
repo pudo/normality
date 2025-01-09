@@ -1,11 +1,12 @@
 [build-system]
-requires = ["setuptools>=61.2.0", "wheel", "setuptools_scm[toml]>=3.4.3"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "normality"
-authors = [{name = "Friedrich Lindenberg", email = "friedrich@pudo.org"}]
-license = {text = "MIT"}
+version = "2.5.0"
+authors = [{ name = "Friedrich Lindenberg", email = "friedrich@pudo.org" }]
+license = { file = "LICENSE" }
 description = "Micro-library to normalize text strings"
 readme = "README.md"
 keywords = ["text", "unicode", "normalization", "slugs"]
@@ -14,40 +15,31 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
-urls = {Homepage = "http://github.com/pudo/normality"}
+requires-python = ">= 3.9"
 dependencies = [
     "banal >= 1.0.1",
     "text-unidecode",
     "chardet",
     "charset-normalizer >= 2.0.0",
 ]
-dynamic = ["version"]
+# dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/pudo/normality"
+Repository = "https://github.com/pudo/normality.git"
+Issues = "https://github.com/pudo/normality/issues"
 
 [project.optional-dependencies]
 icu = ["pyicu >= 1.9.3"]
-dev = [
-    "pyicu >= 1.9.3",
-    "mypy",
-    "pytest",
-    "types-chardet",
-]
+dev = ["pyicu >= 1.9.3", "mypy", "pytest", "types-chardet", "wheel", "build"]
 
-[tool.setuptools]
-zip-safe = false
-include-package-data = true
-
-[tool.setuptools.packages.find]
-exclude = ["ez_setup", "examples", "tests"]
-namespaces = false
-
-[tool.setuptools.package-data]
-banal = ["py.typed"]
-
-[tool.setuptools_scm]
+[tool.hatch.build.targets.sdist]
+only-include = ["normality", "LICENSE", "README.md"]
 
 [tool.distutils.bdist_wheel]
-universal = 1
+universal = true
