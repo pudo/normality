@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update -y -qq
         sudo apt-get install -y -qq libicu-dev
-        pip install --upgrade pip wheel build twine pyicu hatchling
+        pip install --upgrade pip wheel build twine hatchling
         pip install -e ".[dev]"
     - name: Validate mypy typing
       run: |
