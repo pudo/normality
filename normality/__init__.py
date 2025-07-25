@@ -5,6 +5,7 @@ strings, transliterate them into the latin alphabet, make slugs for
 URLs, or perform the substitution of characters based on unicode
 character categories.
 """
+
 from typing import Any, Optional
 
 from normality.cleaning import collapse_spaces, category_replace
@@ -15,7 +16,7 @@ from normality.encoding import predict_encoding, predict_file_encoding
 from normality.encoding import DEFAULT_ENCODING
 from normality.stringify import stringify
 from normality.paths import safe_filename
-from normality.slugify import slugify
+from normality.slugify import slugify, slugify_text
 from normality.util import Categories, Encoding
 
 __version__ = "2.6.1"
@@ -26,6 +27,7 @@ __all__ = [
     "normalize",
     "stringify",
     "slugify",
+    "slugify_text",
     "guess_encoding",
     "guess_file_encoding",
     "predict_encoding",
@@ -34,6 +36,7 @@ __all__ = [
     "ascii_text",
     "WS",
     "UNICODE_CATEGORIES",
+    "DEFAULT_ENCODING",
 ]
 
 

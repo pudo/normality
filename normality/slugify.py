@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 from normality.cleaning import collapse_spaces, category_replace
 from normality.constants import SLUG_CATEGORIES, WS
-from normality.transliteration import latinize_text
+from normality.transliteration import ascii_text
 from normality.stringify import stringify
 
 VALID_CHARS = string.ascii_lowercase + string.digits + WS
@@ -16,11 +16,16 @@ def slugify(value: Any, sep: str = "-") -> Optional[str]:
     text = stringify(value)
     if text is None:
         return None
+    return slugify_text(text, sep=sep)
+
+
+def slugify_text(text: str, sep: str = "-") -> Optional[str]:
+    """Slugify a text string."""
     text = text.replace(sep, WS)
     # run this first because it'll give better results on special
     # characters.
     text = category_replace(text, SLUG_CATEGORIES)
-    text = latinize_text(text, ascii=True)
+    text = ascii_text(text)
     if text is None:
         return None
     text = text.lower()

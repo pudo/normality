@@ -39,7 +39,7 @@ def compose_nfkc(text: Any) -> Optional[str]:
     return unicodedata.normalize("NFKC", text)
 
 
-def strip_quotes(text: Any) -> Optional[str]:
+def strip_quotes(text: str) -> Optional[str]:
     """Remove double or single quotes surrounding a string."""
     if not is_text(text):
         return None
@@ -67,27 +67,30 @@ def category_replace(
     return "".join(characters)
 
 
-def remove_control_chars(text: Any) -> Optional[str]:
+def remove_control_chars(text: str) -> Optional[str]:
     """Remove just the control codes from a piece of text."""
     return category_replace(text, replacements=CONTROL_CODES)
 
 
-def remove_unsafe_chars(text: Any) -> Optional[str]:
+def remove_unsafe_chars(text: str) -> Optional[str]:
     """Remove unsafe unicode characters from a piece of text."""
-    if not is_text(text):
+    if text is None:
         return None
     return UNSAFE_RE.sub("", text)
 
 
-def remove_byte_order_mark(text: Any) -> Optional[str]:
+def remove_byte_order_mark(text: str) -> Optional[str]:
     """Remove a BOM from the beginning of the text."""
-    if not is_text(text):
+    if text is None:
         return None
     return BOM_RE.sub("", text)
 
 
-def collapse_spaces(text: Any) -> Optional[str]:
+def collapse_spaces(text: str) -> Optional[str]:
     """Remove newlines, tabs and multiple spaces with single spaces."""
-    if not is_text(text):
+    if text is None:
         return None
-    return COLLAPSE_RE.sub(WS, text).strip(WS)
+    text = COLLAPSE_RE.sub(WS, text).strip(WS)
+    if len(text) == 0:
+        return None
+    return text
