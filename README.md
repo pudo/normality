@@ -2,16 +2,9 @@
 
 [![build](https://github.com/pudo/normality/actions/workflows/build.yml/badge.svg)](https://github.com/pudo/normality/actions/workflows/build.yml)
 
-Normality is a Python micro-package that contains a small set of text
-normalization functions for easier re-use. These functions accept a
-snippet of unicode or utf-8 encoded text and remove various classes
-of characters, such as diacritics, punctuation etc. This is useful as
-a preparation to further text analysis.
+Normality is a Python micro-package that contains a small set of text normalization functions for easier re-use. These functions accept a snippet of unicode or utf-8 encoded text and remove various classes of characters, such as diacritics, punctuation etc. This is useful as a preparation to further text analysis.
 
-**WARNING**: This library works much better when used in combination 
-with ``pyicu``, a Python binding for the International Components for
-Unicode C library. ICU provides much better text transliteration than
-the default ``text-unidecode``.
+**WARNING**: As of version 3.0, `normality` now requires `pyicu` to be installed.
 
 ## Example
 
@@ -31,5 +24,4 @@ assert collapse_spaces(text) == 'this has lots of odd spacing.'
 
 ## License
 
-``normality`` is open source, licensed under a standard MIT license
-(included in this repository as ``LICENSE``).
+``normality`` is open source, licensed under a standard MIT license (included in this repository as ``LICENSE``).
