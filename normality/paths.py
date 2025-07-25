@@ -15,7 +15,11 @@ def _safe_name(file_name: Optional[str], sep: str) -> Optional[str]:
     if file_name is None:
         return None
     file_name = ascii_text(file_name)
+    if file_name is None:
+        return None
     file_name = category_replace(file_name, UNICODE_CATEGORIES)
+    if file_name is None:
+        return None
     file_name = collapse_spaces(file_name)
     if file_name is None or not len(file_name):
         return None

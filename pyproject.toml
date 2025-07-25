@@ -23,7 +23,7 @@ classifiers = [
 requires-python = ">= 3.9"
 dependencies = [
     "banal >= 1.0.1",
-    "pyicu >= 1.9.3",
+    "pyicu >= 2.10.0",
     "chardet",
     "charset-normalizer >= 2.0.0",
 ]

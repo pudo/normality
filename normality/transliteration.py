@@ -11,18 +11,20 @@ dependency, this module requires neither but will use a package
 if it is installed.
 """
 
-from typing import Optional
+from typing import Callable, Optional
 from functools import lru_cache
 
 from icu import Transliterator  # type: ignore
+
+Trans = Callable[[str], str]
 
 # Transform to latin, separate accents, decompose, remove
 # symbols, compose, push to ASCII
 ASCII_SCRIPT = "Any-Latin; NFKD; [:Nonspacing Mark:] Remove; Accents-Any; [:Symbol:] Remove; [:Nonspacing Mark:] Remove; Latin-ASCII"  # noqa
 # nb. 2021-11-05 Accents-Any is now followed with another nonspacing mark remover.
 # This script is becoming a bit silly, there has to be a nicer way to do this?
-_ASCII = Transliterator.createInstance(ASCII_SCRIPT)  # type: ignore
-_LATINIZE = Transliterator.createInstance("Any-Latin")  # type: ignore
+_ASCII: Trans = Transliterator.createInstance(ASCII_SCRIPT).transliterate
+_LATINIZE: Trans = Transliterator.createInstance("Any-Latin").transliterate
 
 MAX_ASCII = 127  # No non-ASCII characters below this point.
 MAX_LATIN = 740  # No non-latin characters below this point.
@@ -54,7 +56,7 @@ def latinize_text(text: str, ascii: bool = False) -> Optional[str]:
         # If the text is already latin, we can just return it.
         return text
 
-    return _LATINIZE.transliterate(text)  # type: ignore
+    return _LATINIZE(text)
 
 
 def ascii_text(text: str) -> Optional[str]:
@@ -75,7 +77,7 @@ def ascii_text(text: str) -> Optional[str]:
 
 @lru_cache(maxsize=2**16)
 def _ascii_text(text: str) -> Optional[str]:
-    result = _ASCII.transliterate(text)  # type: ignore
+    result = _ASCII(text)
     if result is None:
         return None
     return result.encode("ascii", "replace").decode("ascii")

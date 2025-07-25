@@ -47,7 +47,7 @@ def strip_quotes(text: str) -> Optional[str]:
 
 
 def category_replace(
-    text: Any, replacements: Categories = UNICODE_CATEGORIES
+    text: str, replacements: Categories = UNICODE_CATEGORIES
 ) -> Optional[str]:
     """Remove characters from a string based on unicode classes.
 
@@ -55,9 +55,7 @@ def category_replace(
     whitespace, marks and diacritics) from a piece of text by class, rather
     than specifying them individually.
     """
-    text = decompose_nfkd(text)
-    if not is_text(text):
-        return None
+    text = unicodedata.normalize("NFKD", text)
     characters = []
     for character in text:
         cat = unicodedata.category(character)

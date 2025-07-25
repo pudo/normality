@@ -86,10 +86,10 @@ def normalize(
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
     # punctuation, or whitespace-like characters.
-    if replace_categories is not None:
+    if replace_categories is not None and text is not None:
         text = category_replace(text, replace_categories)
 
-    if collapse:
+    if collapse and text is not None:
         # Remove consecutive whitespace.
         text = collapse_spaces(text)
     return text

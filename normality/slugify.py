@@ -24,13 +24,15 @@ def slugify_text(text: str, sep: str = "-") -> Optional[str]:
     text = text.replace(sep, WS)
     # run this first because it'll give better results on special
     # characters.
-    text = category_replace(text, SLUG_CATEGORIES)
-    text = ascii_text(text)
-    if text is None:
+    replaced = category_replace(text, SLUG_CATEGORIES)
+    if replaced is None:
         return None
-    text = text.lower()
+    ascii = ascii_text(replaced)
+    if ascii is None:
+        return None
+    text = ascii.lower()
     text = "".join([c for c in text if c in VALID_CHARS])
-    text = collapse_spaces(text)
-    if text is None or len(text) == 0:
+    collapsed = collapse_spaces(text)
+    if collapsed is None:
         return None
-    return text.replace(WS, sep)
+    return collapsed.replace(WS, sep)
