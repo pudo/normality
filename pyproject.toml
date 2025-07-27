@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "normality"
-version = "3.0.0"
+version = "3.0.1"
 authors = [{ name = "Friedrich Lindenberg", email = "friedrich@pudo.org" }]
 license = { file = "LICENSE" }
 description = "Micro-library to normalize text strings"
