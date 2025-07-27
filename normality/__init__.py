@@ -8,7 +8,7 @@ character categories.
 
 from typing import Any, Optional
 
-from normality.cleaning import collapse_spaces, category_replace
+from normality.cleaning import collapse_spaces, squash_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import latinize_text, ascii_text
 from normality.encoding import guess_encoding, guess_file_encoding
@@ -22,6 +22,7 @@ from normality.util import Categories, Encoding
 __version__ = "3.0.0"
 __all__ = [
     "collapse_spaces",
+    "squash_spaces",
     "category_replace",
     "safe_filename",
     "normalize",
@@ -86,10 +87,13 @@ def normalize(
     # Perform unicode category-based character replacement. This is
     # used to filter out whole classes of characters, such as symbols,
     # punctuation, or whitespace-like characters.
-    if replace_categories is not None and text is not None:
+    if replace_categories is not None:
         text = category_replace(text, replace_categories)
 
-    if collapse and text is not None:
-        # Remove consecutive whitespace.
-        text = collapse_spaces(text)
+    if collapse:
+        # Remove consecutive whitespace and strip
+        text = squash_spaces(text)
+
+    if len(text) == 0:
+        return None
     return text

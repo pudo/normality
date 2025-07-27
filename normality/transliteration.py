@@ -11,8 +11,9 @@ dependency, this module requires neither but will use a package
 if it is installed.
 """
 
-from typing import Callable, Optional
+from typing import Callable
 from functools import lru_cache
+import warnings
 
 from icu import Transliterator  # type: ignore
 
@@ -35,14 +36,19 @@ class ICUWarning(UnicodeWarning):
 
 
 @lru_cache(maxsize=2**16)
-def latinize_text(text: str, ascii: bool = False) -> Optional[str]:
+def latinize_text(text: str, ascii: bool = False) -> str:
     """Transliterate the given text to the latin script.
 
     This attempts to convert a given text to latin script using the
     closest match of characters vis a vis the original script.
     """
     if text is None:
-        return None
+        warnings.warn(
+            "normality.latinize_text will stop handling None soon.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return ""
 
     if ascii:
         return ascii_text(text)
@@ -59,10 +65,15 @@ def latinize_text(text: str, ascii: bool = False) -> Optional[str]:
     return _LATINIZE(text)
 
 
-def ascii_text(text: str) -> Optional[str]:
+def ascii_text(text: str) -> str:
     """Transliterate the given text and make sure it ends up as ASCII."""
     if text is None:
-        return None
+        warnings.warn(
+            "normality.ascii_text will stop handling None soon.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return ""
 
     is_ascii = True
     for char in text:
@@ -76,8 +87,6 @@ def ascii_text(text: str) -> Optional[str]:
 
 
 @lru_cache(maxsize=2**16)
-def _ascii_text(text: str) -> Optional[str]:
+def _ascii_text(text: str) -> str:
     result = _ASCII(text)
-    if result is None:
-        return None
     return result.encode("ascii", "replace").decode("ascii")

@@ -1,6 +1,7 @@
 import re
 import unicodedata
 from typing import Any, Optional
+import warnings
 
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 from normality.util import Categories, is_text
@@ -42,13 +43,16 @@ def compose_nfkc(text: Any) -> Optional[str]:
 def strip_quotes(text: str) -> Optional[str]:
     """Remove double or single quotes surrounding a string."""
     if not is_text(text):
+        warnings.warn(
+            "normality.strip_quotes will stop handling None soon.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return None
     return QUOTES_RE.sub("\\1", text)
 
 
-def category_replace(
-    text: str, replacements: Categories = UNICODE_CATEGORIES
-) -> Optional[str]:
+def category_replace(text: str, replacements: Categories = UNICODE_CATEGORIES) -> str:
     """Remove characters from a string based on unicode classes.
 
     This is a method for removing non-text characters (such as punctuation,
@@ -65,30 +69,53 @@ def category_replace(
     return "".join(characters)
 
 
-def remove_control_chars(text: str) -> Optional[str]:
+def remove_control_chars(text: str) -> str:
     """Remove just the control codes from a piece of text."""
     return category_replace(text, replacements=CONTROL_CODES)
 
 
-def remove_unsafe_chars(text: str) -> Optional[str]:
+def remove_unsafe_chars(text: str) -> str:
     """Remove unsafe unicode characters from a piece of text."""
     if text is None:
-        return None
+        warnings.warn(
+            "normality.remove_unsafe_chars will stop handling None soon.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return ""
     return UNSAFE_RE.sub("", text)
 
 
-def remove_byte_order_mark(text: str) -> Optional[str]:
+def remove_byte_order_mark(text: str) -> str:
     """Remove a BOM from the beginning of the text."""
     if text is None:
-        return None
+        warnings.warn(
+            "normality.remove_byte_order_mark will stop handling None soon.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return ""
     return BOM_RE.sub("", text)
 
 
 def collapse_spaces(text: str) -> Optional[str]:
     """Remove newlines, tabs and multiple spaces with single spaces."""
+    warnings.warn(
+        "normality.collapse_spaces is deprecated, use normality.squash_spaces instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    # TODO: Remove in 3.1:
     if text is None:
         return None
+
     text = COLLAPSE_RE.sub(WS, text).strip(WS)
     if len(text) == 0:
         return None
     return text
+
+
+def squash_spaces(text: str) -> str:
+    """Remove all whitespace characters from a piece of text."""
+    return COLLAPSE_RE.sub(WS, text).strip(WS)

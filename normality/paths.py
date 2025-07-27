@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from banal import decode_path
 from normality.stringify import stringify
-from normality.cleaning import collapse_spaces, category_replace
+from normality.cleaning import squash_spaces, category_replace
 from normality.constants import UNICODE_CATEGORIES, WS
 from normality.transliteration import ascii_text
 
@@ -15,15 +15,12 @@ def _safe_name(file_name: Optional[str], sep: str) -> Optional[str]:
     if file_name is None:
         return None
     file_name = ascii_text(file_name)
-    if file_name is None:
-        return None
     file_name = category_replace(file_name, UNICODE_CATEGORIES)
-    if file_name is None:
+    file_name = squash_spaces(file_name)
+    file_name = file_name.replace(WS, sep).strip(sep)
+    if len(file_name) == 0:
         return None
-    file_name = collapse_spaces(file_name)
-    if file_name is None or not len(file_name):
-        return None
-    return file_name.replace(WS, sep)
+    return file_name
 
 
 def safe_filename(
