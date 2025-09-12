@@ -6,10 +6,16 @@ import warnings
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 from normality.util import Categories, is_text
 
-COLLAPSE_RE = re.compile(r"[\s\u2028\u2029\u200b\u200c\u200d]+", re.U)
+COLLAPSE_RE = re.compile(
+    r"[\s\u2028\u2000-\u200a\u2029\u0a00\u1680\u202f\u205f\u3000\ufeff]+", re.U
+)
+COLLAPSE_REMOVE_RE = re.compile(r"[\u200b\u200c\u200d\ufeff\u00ad\u2060-\u2064]", re.U)
 BOM_RE = re.compile("^\ufeff", re.U)
 UNSAFE_RE = re.compile(
-    r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f\u2028\u2029\u200b\u200c\u200d]"
+    r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f\u200b\u200c\u200d\u200e\u200f\u061c\u2060-\u2064\u00ad\ufeff]"
+)
+UNSAFE_SPACES_RE = re.compile(
+    r"[\u2000-\u200a\u2028\u2029\u0a00\u202f\u205f\u3000]", re.U
 )
 QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
 
@@ -83,6 +89,7 @@ def remove_unsafe_chars(text: str) -> str:
             stacklevel=2,
         )
         return ""
+    text = UNSAFE_SPACES_RE.sub(WS, text)
     return UNSAFE_RE.sub("", text)
 
 
@@ -118,4 +125,5 @@ def collapse_spaces(text: str) -> Optional[str]:
 
 def squash_spaces(text: str) -> str:
     """Remove all whitespace characters from a piece of text."""
+    text = COLLAPSE_REMOVE_RE.sub("", text)
     return COLLAPSE_RE.sub(WS, text).strip(WS)
