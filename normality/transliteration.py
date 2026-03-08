@@ -13,7 +13,6 @@ if it is installed.
 
 from typing import Callable
 from functools import lru_cache
-import warnings
 
 from icu import Transliterator  # type: ignore
 
@@ -59,14 +58,6 @@ def latinize_text(text: str, ascii: bool = False) -> str:
 
 def ascii_text(text: str) -> str:
     """Transliterate the given text and make sure it ends up as ASCII."""
-    if text is None:
-        warnings.warn(
-            "normality.ascii_text will stop handling None soon.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return ""
-
     if text.isascii():
         # If the text is already ASCII, we can just return it.
         return text
