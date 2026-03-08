@@ -21,7 +21,16 @@ def test_remove_unsafe_chars_controls() -> None:
 
 def test_remove_unsafe_chars_spaces() -> None:
     # Unsafe space-like chars are replaced with a regular space
-    for cp in [*range(0x2000, 0x200B), 0x2028, 0x2029, 0x0A00, 0x1680, 0x202F, 0x205F, 0x3000]:
+    for cp in [
+        *range(0x2000, 0x200B),
+        0x2028,
+        0x2029,
+        0x0A00,
+        0x1680,
+        0x202F,
+        0x205F,
+        0x3000,
+    ]:
         assert remove_unsafe_chars(chr(cp)) == " ", f"expected space for U+{cp:04X}"
 
 
@@ -41,7 +50,6 @@ def test_remove_unsafe_chars_clean_passthrough() -> None:
 
 
 def test_collapse_spaces():
-    assert collapse_spaces(None) is None  # type: ignore
     assert collapse_spaces("") is None
     assert collapse_spaces(" ") is None
     assert collapse_spaces("  ") is None

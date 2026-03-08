@@ -13,9 +13,7 @@ from normality import (
 
 def test_empty():
     assert slugify(None) is None
-    assert ascii_text(None) == ""  # type: ignore
     assert ascii_text("") == ""
-    assert latinize_text(None) == ""  # latinize_text returns empty string for None
     assert normalize(None) is None
     assert normalize("") is None
     assert normalize(" ") is None

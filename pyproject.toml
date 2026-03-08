@@ -43,3 +43,6 @@ only-include = ["normality", "LICENSE", "README.md"]
 
 [tool.distutils.bdist_wheel]
 universal = true
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::DeprecationWarning"]

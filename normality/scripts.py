@@ -1,5 +1,6 @@
 from typing import Tuple
 from functools import lru_cache
+import warnings
 
 ALPHABET = 1
 LATIN = 2
@@ -676,6 +677,11 @@ def is_modern_alphabet(word: str) -> bool:
     used in a narrow sense here: it includes only alphabets that have vowels and
     are safely transliterated to latin. Basically: Cyrillic, Greek, Armenian,
     and Latin."""
+    warnings.warn(
+        "is_modern_alphabet is deprecated, use rigour.text.is_modern_alphabet instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     for char in word:
         tags = char_tags(char)
         if not len(tags):
@@ -689,6 +695,11 @@ def is_modern_alphabet(word: str) -> bool:
 
 def is_latin(word: str) -> bool:
     """Check if a word is written in the latin alphabet."""
+    warnings.warn(
+        "is_latin is deprecated, use rigour.text.is_latin instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     for char in word:
         tags = char_tags(char)
         if not len(tags):
