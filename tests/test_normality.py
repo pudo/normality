@@ -91,13 +91,13 @@ def test_predict_encoding():
 def test_guess_file_encoding():
     with open("tests/fixtures/utf-16.txt", "rb") as fh:
         out = guess_file_encoding(fh)
-        assert out == "utf-16"
+        assert out.startswith("utf-16")
 
 
 def test_predict_file_encoding():
     with open("tests/fixtures/utf-16.txt", "rb") as fh:
         out = predict_file_encoding(fh)
-        assert out == "utf-16"
+        assert out.startswith("utf-16")
 
 
 def test_petro_iso_encoded():

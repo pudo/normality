@@ -116,16 +116,7 @@ def predict_file_encoding(
 ) -> Encoding:
     """Guess encoding from a file handle."""
     start = fh.tell()
-    result: CharsetMatches = CharsetMatches()
-
-    while True:
-        data = fh.read(1024 * 10)
-        if not data:
-            break
-
-        result = from_bytes(data, explain=False)
-        if result:
-            break
-
+    data = fh.read(1024 * 100)
     fh.seek(start)
+    result = from_bytes(data, explain=False)
     return tidy_result(result, default=default)
