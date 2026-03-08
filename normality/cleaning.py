@@ -88,7 +88,7 @@ def strip_quotes(text: str) -> Optional[str]:
     return QUOTES_RE.sub("\\1", text)
 
 
-class _TranslateTable(dict):
+class _TranslateTable(dict[int, Optional[int]]):
     """Lazy str.translate() table for category-based character replacement.
 
     Caches codepoint → replacement mappings on first encounter, up to

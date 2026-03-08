@@ -5,6 +5,7 @@ install:
 	pip install -q '.[dev]'
 
 check: test typecheck
+	ruff check normality
 
 test:
 	pytest

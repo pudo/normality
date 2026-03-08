@@ -15,12 +15,12 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">= 3.9"
+requires-python = ">= 3.10"
 dependencies = [
     "banal >= 1.0.1",
     "pyicu >= 2.10.0",
@@ -36,7 +36,7 @@ Issues = "https://github.com/pudo/normality/issues"
 
 [project.optional-dependencies]
 icu = []
-dev = ["mypy", "pytest", "types-chardet", "wheel", "build"]
+dev = ["mypy", "pytest", "ruff", "types-chardet", "wheel", "build"]
 
 [tool.hatch.build.targets.sdist]
 only-include = ["normality", "LICENSE", "README.md"]
