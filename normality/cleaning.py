@@ -1,10 +1,12 @@
 import re
 import unicodedata
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 import warnings
 
 from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 from normality.util import Categories, is_text
+
+TRANSLATE_CACHE_MAX = 2**15
 
 COLLAPSE_RE = re.compile(
     r"[\s\u2028\u2000-\u200a\u2029\u0a00\u1680\u202f\u205f\u3000]+", re.U
@@ -16,28 +18,28 @@ QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
 # Unicode space-like codepoints that should be normalised to a plain space.
 _UNSAFE_SPACE_CPS = (
     *range(0x2000, 0x200B),  # General punctuation spaces (en quad … hair space)
-    0x2028,                  # Line separator
-    0x2029,                  # Paragraph separator
-    0x0A00,                  # (reserved, appears as space in some datasets)
-    0x1680,                  # Ogham space mark
-    0x202F,                  # Narrow no-break space
-    0x205F,                  # Medium mathematical space
-    0x3000,                  # Ideographic space
+    0x2028,  # Line separator
+    0x2029,  # Paragraph separator
+    0x0A00,  # (reserved, appears as space in some datasets)
+    0x1680,  # Ogham space mark
+    0x202F,  # Narrow no-break space
+    0x205F,  # Medium mathematical space
+    0x3000,  # Ideographic space
 )
 _UNSAFE_SPACE_SET = frozenset(chr(cp) for cp in _UNSAFE_SPACE_CPS)
 
 # Codepoints that should be deleted entirely from text.
 _UNSAFE_DELETE_CPS = (
-    *range(0x00, 0x09),      # C0 controls: NUL–BS (excludes HT U+0009)
-    *range(0x0B, 0x0D),      # C0 controls: VT, FF (excludes CR U+000D)
-    *range(0x0E, 0x20),      # C0 controls: SO–US
-    0x7F,                    # DEL
-    *range(0x80, 0xA0),      # C1 controls
+    *range(0x00, 0x09),  # C0 controls: NUL–BS (excludes HT U+0009)
+    *range(0x0B, 0x0D),  # C0 controls: VT, FF (excludes CR U+000D)
+    *range(0x0E, 0x20),  # C0 controls: SO–US
+    0x7F,  # DEL
+    *range(0x80, 0xA0),  # C1 controls
     *range(0x200B, 0x2010),  # Zero-width space, ZWNJ, ZWJ, LRM, RLM, ALM, LRE, RLE...
-    0x061C,                  # Arabic letter mark
+    0x061C,  # Arabic letter mark
     *range(0x2060, 0x2065),  # Word joiner, invisible operators
-    0x00AD,                  # Soft hyphen
-    0xFEFF,                  # BOM / zero-width no-break space
+    0x00AD,  # Soft hyphen
+    0xFEFF,  # BOM / zero-width no-break space
     # Lone UTF-16 surrogates (U+D800–U+DFFF): not valid Unicode characters,
     # only appear in Python str when decoded with surrogatepass/surrogatescape.
     *range(0xD800, 0xE000),
@@ -86,6 +88,33 @@ def strip_quotes(text: str) -> Optional[str]:
     return QUOTES_RE.sub("\\1", text)
 
 
+class _TranslateTable(dict):
+    """Lazy str.translate() table for category-based character replacement.
+
+    Caches codepoint → replacement mappings on first encounter, up to
+    TRANSLATE_CACHE_MAX entries. Beyond that limit, lookups fall back to a
+    direct category call without caching.
+    """
+
+    CACHE: Dict[int, "_TranslateTable"] = {}
+
+    def __init__(self, replacements: Categories) -> None:
+        self._replacements = replacements
+
+    def __missing__(self, codepoint: int) -> Optional[int]:
+        cat = unicodedata.category(chr(codepoint))
+        replacement = self._replacements.get(cat)
+        if replacement is None and cat not in self._replacements:
+            val: Optional[int] = codepoint  # not in replacements: keep as-is
+        elif not replacement:
+            val = None  # delete
+        else:
+            val = ord(replacement[0])  # replace with first char (e.g. space)
+        if len(self) < TRANSLATE_CACHE_MAX:
+            self[codepoint] = val
+        return val
+
+
 def category_replace(text: str, replacements: Categories = UNICODE_CATEGORIES) -> str:
     """Remove characters from a string based on unicode classes.
 
@@ -93,14 +122,11 @@ def category_replace(text: str, replacements: Categories = UNICODE_CATEGORIES) -
     whitespace, marks and diacritics) from a piece of text by class, rather
     than specifying them individually.
     """
+    table_key = id(replacements)
+    if table_key not in _TranslateTable.CACHE:
+        _TranslateTable.CACHE[table_key] = _TranslateTable(replacements)
     text = unicodedata.normalize("NFKD", text)
-    characters = []
-    for character in text:
-        cat = unicodedata.category(character)
-        replacement = replacements.get(cat, character)
-        if replacement is not None:
-            characters.append(replacement)
-    return "".join(characters)
+    return text.translate(_TranslateTable.CACHE[table_key])
 
 
 def remove_control_chars(text: str) -> str:

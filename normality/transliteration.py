@@ -42,14 +42,6 @@ def latinize_text(text: str, ascii: bool = False) -> str:
     This attempts to convert a given text to latin script using the
     closest match of characters vis a vis the original script.
     """
-    if text is None:
-        warnings.warn(
-            "normality.latinize_text will stop handling None soon.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return ""
-
     if ascii:
         return ascii_text(text)
 
