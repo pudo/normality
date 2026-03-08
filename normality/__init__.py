@@ -19,7 +19,7 @@ from normality.paths import safe_filename
 from normality.slugify import slugify, slugify_text
 from normality.util import Categories, Encoding
 
-__version__ = "3.0.2"
+__version__ = "3.1.0"
 __all__ = [
     "collapse_spaces",
     "squash_spaces",
