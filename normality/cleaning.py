@@ -7,7 +7,7 @@ from normality.constants import UNICODE_CATEGORIES, CONTROL_CODES, WS
 from normality.util import Categories, is_text
 
 COLLAPSE_RE = re.compile(
-    r"[\s\u2028\u2000-\u200a\u2029\u0a00\u1680\u202f\u205f\u3000\ufeff]+", re.U
+    r"[\s\u2028\u2000-\u200a\u2029\u0a00\u1680\u202f\u205f\u3000]+", re.U
 )
 COLLAPSE_REMOVE_RE = re.compile(r"[\u200b\u200c\u200d\ufeff\u00ad\u2060-\u2064]", re.U)
 BOM_RE = re.compile("^\ufeff", re.U)

@@ -34,7 +34,7 @@ def stringify(
         # Avoid trailing zeros and limit to 3 decimal places:
         return format(value, ".3f").rstrip("0").rstrip(".")
     elif isinstance(value, Decimal):
-        return Decimal(value).to_eng_string()
+        return value.to_eng_string()
     elif isinstance(value, bytes):
         if encoding is None:
             encoding = predict_encoding(value, default=encoding_default)

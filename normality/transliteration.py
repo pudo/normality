@@ -75,12 +75,7 @@ def ascii_text(text: str) -> str:
         )
         return ""
 
-    is_ascii = True
-    for char in text:
-        if ord(char) > MAX_ASCII:
-            is_ascii = False
-            break
-    if is_ascii:
+    if text.isascii():
         # If the text is already ASCII, we can just return it.
         return text
     return _ascii_text(text)
