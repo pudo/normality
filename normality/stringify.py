@@ -40,7 +40,5 @@ def stringify(
             encoding = predict_encoding(value, default=encoding_default)
         value = value.decode(encoding, "replace")
         value = remove_unsafe_chars(value)
-        if value is None:
-            return None
         return _clean_empty(value)
     return _clean_empty(str(value))

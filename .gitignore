@@ -5,3 +5,5 @@ build/*
 .vscode/*
 .pytest_cache
 .mypy_cache/*
+.DS_Store
+__pycache__/*

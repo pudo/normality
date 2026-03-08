@@ -11,13 +11,41 @@ COLLAPSE_RE = re.compile(
 )
 COLLAPSE_REMOVE_RE = re.compile(r"[\u200b\u200c\u200d\ufeff\u00ad\u2060-\u2064]", re.U)
 BOM_RE = re.compile("^\ufeff", re.U)
-UNSAFE_RE = re.compile(
-    r"^\ufeff|[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f\x80-\x9f\u200b\u200c\u200d\u200e\u200f\u061c\u2060-\u2064\u00ad\ufeff]"
-)
-UNSAFE_SPACES_RE = re.compile(
-    r"[\u2000-\u200a\u2028\u2029\u0a00\u202f\u205f\u3000]", re.U
-)
 QUOTES_RE = re.compile(r'^["\'](.*)["\']$')
+
+# Unicode space-like codepoints that should be normalised to a plain space.
+_UNSAFE_SPACE_CPS = (
+    *range(0x2000, 0x200B),  # General punctuation spaces (en quad … hair space)
+    0x2028,                  # Line separator
+    0x2029,                  # Paragraph separator
+    0x0A00,                  # (reserved, appears as space in some datasets)
+    0x1680,                  # Ogham space mark
+    0x202F,                  # Narrow no-break space
+    0x205F,                  # Medium mathematical space
+    0x3000,                  # Ideographic space
+)
+_UNSAFE_SPACE_SET = frozenset(chr(cp) for cp in _UNSAFE_SPACE_CPS)
+
+# Codepoints that should be deleted entirely from text.
+_UNSAFE_DELETE_CPS = (
+    *range(0x00, 0x09),      # C0 controls: NUL–BS (excludes HT U+0009)
+    *range(0x0B, 0x0D),      # C0 controls: VT, FF (excludes CR U+000D)
+    *range(0x0E, 0x20),      # C0 controls: SO–US
+    0x7F,                    # DEL
+    *range(0x80, 0xA0),      # C1 controls
+    *range(0x200B, 0x2010),  # Zero-width space, ZWNJ, ZWJ, LRM, RLM, ALM, LRE, RLE...
+    0x061C,                  # Arabic letter mark
+    *range(0x2060, 0x2065),  # Word joiner, invisible operators
+    0x00AD,                  # Soft hyphen
+    0xFEFF,                  # BOM / zero-width no-break space
+    # Lone UTF-16 surrogates (U+D800–U+DFFF): not valid Unicode characters,
+    # only appear in Python str when decoded with surrogatepass/surrogatescape.
+    *range(0xD800, 0xE000),
+)
+_UNSAFE_COMBINED_CPS = set(_UNSAFE_SPACE_CPS) | set(_UNSAFE_DELETE_CPS)
+_UNSAFE_COMBINED_RE = re.compile(
+    "[" + "".join(re.escape(chr(cp)) for cp in _UNSAFE_COMBINED_CPS) + "]"
+)
 
 
 def decompose_nfkd(text: Any) -> Optional[str]:
@@ -80,28 +108,21 @@ def remove_control_chars(text: str) -> str:
     return category_replace(text, replacements=CONTROL_CODES)
 
 
+def _unsafe_repl(m: re.Match[str]) -> str:
+    return WS if m.group() in _UNSAFE_SPACE_SET else ""
+
+
 def remove_unsafe_chars(text: str) -> str:
-    """Remove unsafe unicode characters from a piece of text."""
-    if text is None:
-        warnings.warn(
-            "normality.remove_unsafe_chars will stop handling None soon.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return ""
-    text = UNSAFE_SPACES_RE.sub(WS, text)
-    return UNSAFE_RE.sub("", text)
+    """Remove unsafe unicode characters from a piece of text.
+
+    Replaces space-like Unicode chars with a plain space, and deletes control
+    characters, invisible formatting characters, and lone UTF-16 surrogates.
+    """
+    return _UNSAFE_COMBINED_RE.sub(_unsafe_repl, text)
 
 
 def remove_byte_order_mark(text: str) -> str:
     """Remove a BOM from the beginning of the text."""
-    if text is None:
-        warnings.warn(
-            "normality.remove_byte_order_mark will stop handling None soon.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return ""
     return BOM_RE.sub("", text)
 
 
