@@ -67,4 +67,6 @@ def ascii_text(text: str) -> str:
 @lru_cache(maxsize=2**16)
 def _ascii_text(text: str) -> str:
     result = _ASCII(text)
+    if result.isascii():
+        return result
     return result.encode("ascii", "replace").decode("ascii")
