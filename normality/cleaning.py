@@ -88,7 +88,7 @@ def strip_quotes(text: str) -> Optional[str]:
     return QUOTES_RE.sub("\\1", text)
 
 
-class _TranslateTable(dict[int, Optional[int]]):
+class _TranslateTable(dict[int, int | str | None]):
     """Lazy str.translate() table for category-based character replacement.
 
     Caches codepoint → replacement mappings on first encounter, up to
@@ -99,17 +99,17 @@ class _TranslateTable(dict[int, Optional[int]]):
     CACHE: Dict[int, "_TranslateTable"] = {}
 
     def __init__(self, replacements: Categories) -> None:
-        self._replacements = replacements
+        self._replacements = replacements.copy()
 
-    def __missing__(self, codepoint: int) -> Optional[int]:
+    def __missing__(self, codepoint: int) -> int | str | None:
         cat = unicodedata.category(chr(codepoint))
         replacement = self._replacements.get(cat)
         if replacement is None and cat not in self._replacements:
-            val: Optional[int] = codepoint  # not in replacements: keep as-is
+            val: int | str | None = codepoint  # not in replacements: keep as-is
         elif not replacement:
             val = None  # delete
         else:
-            val = ord(replacement[0])  # replace with first char (e.g. space)
+            val = ord(replacement) if len(replacement) == 1 else replacement
         if len(self) < TRANSLATE_CACHE_MAX:
             self[codepoint] = val
         return val
@@ -123,10 +123,12 @@ def category_replace(text: str, replacements: Categories = UNICODE_CATEGORIES) -
     than specifying them individually.
     """
     table_key = id(replacements)
-    if table_key not in _TranslateTable.CACHE:
-        _TranslateTable.CACHE[table_key] = _TranslateTable(replacements)
+    table = _TranslateTable.CACHE.get(table_key)
+    if table is None or table._replacements != replacements:
+        table = _TranslateTable(replacements)
+        _TranslateTable.CACHE[table_key] = table
     text = unicodedata.normalize("NFKD", text)
-    return text.translate(_TranslateTable.CACHE[table_key])
+    return text.translate(table)
 
 
 def remove_control_chars(text: str) -> str:
