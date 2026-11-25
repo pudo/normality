@@ -1,4 +1,39 @@
-from normality.cleaning import remove_unsafe_chars, collapse_spaces, squash_spaces
+from normality.cleaning import (
+    category_replace,
+    remove_unsafe_chars,
+    collapse_spaces,
+    squash_spaces,
+)
+
+
+def test_category_replace_preserves_full_replacements():
+    replacements = {"Po": "<punct>", "Nd": "number"}
+    assert category_replace("a!2?", replacements) == "a<punct>number<punct>"
+    assert category_replace("b?3!", replacements) == "b<punct>number<punct>"
+
+
+def test_category_replace_observes_mapping_changes():
+    replacements = {"Po": "_"}
+    assert category_replace("a!", replacements) == "a_"
+
+    replacements["Po"] = "-"
+    assert category_replace("a!?", replacements) == "a--"
+
+    replacements["Po"] = ""
+    assert category_replace("a!?", replacements) == "a"
+
+    replacements["Po"] = None
+    assert category_replace("a!?", replacements) == "a"
+
+    del replacements["Po"]
+    assert category_replace("a!?", replacements) == "a!?"
+
+
+def test_category_replace_observes_new_categories():
+    replacements = {}
+    assert category_replace("a!", replacements) == "a!"
+    replacements["Po"] = None
+    assert category_replace("a!", replacements) == "a"
 
 
 def test_remove_unsafe_chars():
