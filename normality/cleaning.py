@@ -35,9 +35,11 @@ _UNSAFE_DELETE_CPS = (
     *range(0x0E, 0x20),  # C0 controls: SO–US
     0x7F,  # DEL
     *range(0x80, 0xA0),  # C1 controls
-    *range(0x200B, 0x2010),  # Zero-width space, ZWNJ, ZWJ, LRM, RLM, ALM, LRE, RLE...
+    *range(0x200B, 0x2010),  # Zero-width space, ZWNJ, ZWJ, LRM, RLM
     0x061C,  # Arabic letter mark
+    *range(0x202A, 0x202F),  # Directional embeddings, overrides, and PDF
     *range(0x2060, 0x2065),  # Word joiner, invisible operators
+    *range(0x2066, 0x206A),  # Directional isolates and PDI
     0x00AD,  # Soft hyphen
     0xFEFF,  # BOM / zero-width no-break space
     # Lone UTF-16 surrogates (U+D800–U+DFFF): not valid Unicode characters,
